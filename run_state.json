@@ -1,0 +1,227 @@
+{
+  "next_index": 37,
+  "results": [
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "http://www.kokumin-kaigi.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 0, \"ev_reg\": 0, \"ev_count\": 2, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 40, \"name_match\": 40, \"address_match\": 30, \"final_url_score\": 60, \"final_total\": 170}",
+      "score": 110,
+      "reason": "スコア110>=70"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "https://lift-f.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 50, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 20, \"profile_bonus\": 20, \"final_url_score\": 60, \"final_total\": 260}",
+      "score": 200,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "https://www.k-built.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 30, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 40, \"schema_bonus\": 10, \"final_url_score\": 60, \"final_total\": 250}",
+      "score": 190,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "http://takahamasekkei.sa-suke.com/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"final_url_score\": 60, \"final_total\": 210}",
+      "score": 150,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://iplusone.co.jp/corporates/9290802009334",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 0, \"ev_reg\": 0, \"ev_count\": 2, \"ownership_pos\": 1, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 20, \"name_match\": 40, \"address_match\": 30, \"final_url_score\": 0, \"final_total\": 90}",
+      "score": 90,
+      "reason": "スコア90>=70"
+    },
+    {
+      "url": "https://setogumi.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 50, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 20, \"profile_bonus\": 20, \"schema_bonus\": 10, \"final_url_score\": 60, \"final_total\": 270}",
+      "score": 210,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://fukuyakensetu.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 1, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 50, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"final_url_score\": 60, \"final_total\": 220}",
+      "score": 160,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "https://yoh-jimusho.com/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 30, \"final_url_score\": 60, \"final_total\": 240}",
+      "score": 180,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://housingplaza-recruit.com/about/company",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 10, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 20, \"profile_bonus\": 20, \"schema_bonus\": 10, \"final_url_score\": 25, \"final_total\": 195}",
+      "score": 170,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://takafuji.co.jp/wp/sample-page-2/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"key_reg\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 1, \"ev_count\": 4, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 20, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"reg_match\": 20, \"schema_bonus\": 10, \"final_url_score\": 0, \"final_total\": 160}",
+      "score": 160,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://careecon.jp/company/co4245304903",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 0, \"ev_reg\": 0, \"ev_count\": 2, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 10, \"name_match\": 40, \"address_match\": 30, \"final_url_score\": 25, \"final_total\": 105}",
+      "score": 80,
+      "reason": "スコア80>=70"
+    },
+    {
+      "url": "http://yamasaki-1972.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 50, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"final_url_score\": 60, \"final_total\": 220}",
+      "score": 160,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "https://www.setoken.net/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 60, \"profile_bonus\": 20, \"final_url_score\": 60, \"final_total\": 290}",
+      "score": 230,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://www.core-web.co.jp/voice.html",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 0, \"ev_reg\": 0, \"ev_count\": 2, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 30, \"name_match\": 40, \"address_match\": 30, \"final_url_score\": 0, \"final_total\": 100}",
+      "score": 100,
+      "reason": "スコア100>=70"
+    },
+    {
+      "url": "https://www.ikeda-kogyo.co.jp/company/outline/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 0, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 20, \"profile_bonus\": 20, \"schema_bonus\": 10, \"final_url_score\": 25, \"final_total\": 185}",
+      "score": 160,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "https://atelier-kasho.com/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 3, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 20, \"final_url_score\": 60, \"final_total\": 230}",
+      "score": 170,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "https://nanokawa.com/company.html",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"key_reg\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 1, \"ev_count\": 4, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"reg_match\": 20, \"structure_bonus\": 30, \"profile_bonus\": 20, \"final_url_score\": 25, \"final_total\": 245}",
+      "score": 220,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://www.fmgc.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 1, \"ev_reg\": 0, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 30, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 40, \"profile_bonus\": 20, \"final_url_score\": 60, \"final_total\": 260}",
+      "score": 200,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "https://hayatahome.com/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_reg\": 1, \"ev_name\": 1, \"ev_addr\": 1, \"ev_rep\": 0, \"ev_phone\": 0, \"ev_reg\": 1, \"ev_count\": 3, \"ownership_pos\": 2, \"ownership_neg\": 0, \"ownership_ok\": 1, \"domain\": 40, \"name_match\": 40, \"address_match\": 30, \"reg_match\": 20, \"final_url_score\": 60, \"final_total\": 190}",
+      "score": 130,
+      "reason": "スコア130>=70"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    }
+  ]
+}

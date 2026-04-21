@@ -1,0 +1,227 @@
+{
+  "next_index": 37,
+  "results": [
+    {
+      "url": "https://tsukulink.net/companies",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"domain\": 40, \"name_match\": 40, \"address_match\": 30, \"final_url_score\": 0, \"final_total\": 110}",
+      "score": 110,
+      "reason": "スコア110>=70"
+    },
+    {
+      "url": "https://tsukulink.net/companies",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"domain\": 40, \"name_match\": 40, \"address_match\": 30, \"final_url_score\": 0, \"final_total\": 110}",
+      "score": 110,
+      "reason": "スコア110>=70"
+    },
+    {
+      "url": "https://www.shiraesangyo.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 30, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 40, \"final_url_score\": 60, \"final_total\": 240}",
+      "score": 180,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://lift-f.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 50, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 20, \"profile_bonus\": 20, \"final_url_score\": 60, \"final_total\": 260}",
+      "score": 200,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://tsukulink.net/companies",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"domain\": 40, \"name_match\": 40, \"address_match\": 30, \"final_url_score\": 0, \"final_total\": 110}",
+      "score": 110,
+      "reason": "スコア110>=70"
+    },
+    {
+      "url": "https://praise-arc.com/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"profile_bonus\": 20, \"final_url_score\": 60, \"final_total\": 230}",
+      "score": 170,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://www.k-built.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 30, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 40, \"schema_bonus\": 10, \"final_url_score\": 60, \"final_total\": 250}",
+      "score": 190,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://takahamasekkei.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"key_reg\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"reg_match\": 20, \"structure_bonus\": 50, \"schema_bonus\": 10, \"final_url_score\": 60, \"final_total\": 290}",
+      "score": 230,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://companyinformation.jp/corp/9290802009334/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"domain\": 10, \"name_match\": 40, \"address_match\": 30, \"profile_bonus\": 20, \"final_url_score\": 0, \"final_total\": 100}",
+      "score": 100,
+      "reason": "スコア100>=70"
+    },
+    {
+      "url": "https://setogumi.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 50, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 20, \"schema_bonus\": 10, \"final_url_score\": 60, \"final_total\": 250}",
+      "score": 190,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://mapfan.com/spots/SIYC,J,AAGD7",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 10, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"final_url_score\": 0, \"final_total\": 120}",
+      "score": 120,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://companyinformation.jp/corp/9290801007561/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"domain\": 10, \"name_match\": 40, \"address_match\": 30, \"profile_bonus\": 20, \"final_url_score\": 0, \"final_total\": 100}",
+      "score": 100,
+      "reason": "スコア100>=70"
+    },
+    {
+      "url": "https://clients.itszai.jp/4d6a4d354f44673d",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"domain\": 40, \"name_match\": 40, \"address_match\": 30, \"structure_bonus\": 20, \"final_url_score\": 0, \"final_total\": 130}",
+      "score": 130,
+      "reason": "スコア130>=70"
+    },
+    {
+      "url": "https://yoh-jimusho.com/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 30, \"final_url_score\": 60, \"final_total\": 240}",
+      "score": 180,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://www.294849.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"key_reg\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"reg_match\": 20, \"final_url_score\": 60, \"final_total\": 230}",
+      "score": 170,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://takafuji.co.jp/wp/sample-page-2/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"key_reg\": 1, \"domain\": 20, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"reg_match\": 20, \"schema_bonus\": 10, \"final_url_score\": 0, \"final_total\": 160}",
+      "score": 160,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "http://yamasaki-1972.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 50, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"profile_bonus\": 20, \"final_url_score\": 60, \"final_total\": 240}",
+      "score": 180,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "http://www.koumuten-uchida.com/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 60, \"final_url_score\": 60, \"final_total\": 270}",
+      "score": 210,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://www.setoken.net/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 40, \"final_url_score\": 60, \"final_total\": 250}",
+      "score": 190,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://www.nikkei.com/compass/company/7UWNHVut9VNroTDDHZabQG",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"domain\": 10, \"name_match\": 40, \"address_match\": 30, \"final_url_score\": 25, \"final_total\": 105}",
+      "score": 80,
+      "reason": "スコア80>=70"
+    },
+    {
+      "url": "https://www.ikeda-kogyo.co.jp/location/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 30, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 20, \"profile_bonus\": 20, \"final_url_score\": 0, \"final_total\": 180}",
+      "score": 180,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://tsukulink.net/companies",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"domain\": 40, \"name_match\": 40, \"address_match\": 30, \"final_url_score\": 0, \"final_total\": 110}",
+      "score": 110,
+      "reason": "スコア110>=70"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "https://atelier-kasho.com/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 10, \"profile_bonus\": 20, \"final_url_score\": 60, \"final_total\": 240}",
+      "score": 180,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://jp.stanby.com/r_8b7ff4440b05874e4d9508b688bb0313",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"domain\": 40, \"name_match\": 40, \"address_match\": 30, \"structure_bonus\": 20, \"final_url_score\": 0, \"final_total\": 130}",
+      "score": 130,
+      "reason": "スコア130>=70"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "https://www.iejin.com/introduce/%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE-mf%E3%82%B3%E3%83%B3%E3%82%B5%E3%83%AB%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 10, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"schema_bonus\": 10, \"final_url_score\": 0, \"final_total\": 130}",
+      "score": 130,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://nanokawa.com/company.html",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"key_reg\": 1, \"domain\": 40, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"reg_match\": 20, \"structure_bonus\": 30, \"profile_bonus\": 20, \"final_url_score\": 25, \"final_total\": 245}",
+      "score": 220,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://www.fmgc.co.jp/",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 30, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"structure_bonus\": 40, \"profile_bonus\": 20, \"final_url_score\": 60, \"final_total\": 260}",
+      "score": 200,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "https://biz-maps.com/item/L4loMP9DYv",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"domain\": 10, \"name_match\": 40, \"address_match\": 30, \"final_url_score\": 0, \"final_total\": 80}",
+      "score": 80,
+      "reason": "スコア80>=70"
+    },
+    {
+      "url": "https://www.sakamotokensetsu.co.jp/company.html",
+      "detail": "{\"key_name\": 1, \"domain\": 30, \"name_match\": 40, \"address_miss_penalty_relaxed\": -10, \"structure_bonus\": 20, \"personal_office_rule\": 1, \"final_url_score\": 25, \"final_total\": 105}",
+      "score": 80,
+      "reason": "個人事務所ルール instant_accept"
+    },
+    {
+      "url": "https://nao-house.tokyo/%e4%bc%9a%e7%a4%be%e6%a1%88%e5%86%85/",
+      "detail": "{\"key_name\": 1, \"domain\": 40, \"name_match\": 40, \"address_miss_penalty\": -45, \"structure_bonus\": 20, \"profile_bonus\": 20, \"final_url_score\": 0, \"final_total\": 75}",
+      "score": 75,
+      "reason": "スコア75>=70"
+    },
+    {
+      "url": "https://mapfan.com/spots/SIYC,J,11AH7",
+      "detail": "{\"key_name\": 1, \"key_addr\": 1, \"key_phone\": 1, \"domain\": 10, \"name_match\": 40, \"phone_match\": 40, \"address_match\": 30, \"final_url_score\": 0, \"final_total\": 120}",
+      "score": 120,
+      "reason": "法人強一致 instant_accept"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    },
+    {
+      "url": "https://sokenkobo-en.co.jp/",
+      "detail": "{\"key_name\": 1, \"domain\": 50, \"name_match\": 40, \"address_miss_penalty_relaxed\": -10, \"structure_bonus\": 20, \"profile_bonus\": 20, \"personal_office_rule\": 1, \"final_url_score\": 60, \"final_total\": 180}",
+      "score": 120,
+      "reason": "個人事務所ルール instant_accept"
+    },
+    {
+      "url": "",
+      "detail": "{}",
+      "score": 0,
+      "reason": "有効候補なし"
+    }
+  ]
+}
