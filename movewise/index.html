@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MoveWise｜移動最適化アプリ MVP</title>
+  <style>
+    :root{
+      --bg:#f1f5f9; --card:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0;
+      --main:#0f766e; --main2:#0891b2; --dark:#020617; --warn:#92400e; --warnbg:#fffbeb;
+      --shadow:0 14px 34px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+    .wrap{max-width:1280px;margin:0 auto;padding:24px}.hero{background:linear-gradient(135deg,#020617,#0f172a 50%,#115e59);color:white;border-radius:28px;padding:28px;box-shadow:var(--shadow);overflow:hidden;position:relative}.hero:after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:rgba(45,212,191,.12)}.badge{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);padding:6px 10px;border-radius:999px;font-size:12px;color:#ccfbf1;font-weight:700}.hero-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:end}.hero h1{font-size:36px;line-height:1.05;margin:16px 0 8px}.hero p{margin:0;color:#cbd5e1;line-height:1.7}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:14px}.stat small{display:block;color:#cbd5e1;font-size:12px}.stat b{font-size:22px}.grid{display:grid;grid-template-columns:420px 1fr;gap:20px;margin-top:20px}.card{background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:0 8px 24px rgba(15,23,42,.05);padding:18px;margin-bottom:16px}.card h2{font-size:17px;margin:0 0 14px;display:flex;gap:8px;align-items:center}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:block;margin-bottom:10px}.field span{display:block;font-size:12px;color:#475569;font-weight:700;margin:0 0 5px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:13px;background:white;padding:10px 12px;font-size:14px;outline:none}input:focus,select:focus,textarea:focus{border-color:#14b8a6;box-shadow:0 0 0 4px rgba(20,184,166,.14)}textarea{resize:vertical}.checks{display:grid;gap:8px;margin-top:8px}.check{display:flex;gap:8px;align-items:center;background:#f8fafc;border-radius:14px;padding:10px;font-size:14px}.check input{width:auto}.btns{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:13px;padding:10px 13px;font-weight:800;cursor:pointer;background:#0f172a;color:white}.btn.secondary{background:white;color:#334155;border:1px solid var(--line)}.btn.teal{background:#0f766e;color:white}.btn.danger{background:#fff1f2;color:#be123c;border:1px solid #ffe4e6}.btn:hover{filter:brightness(.97)}.dest{background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:10px}.dest-head{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:#334155;margin-bottom:8px}.notice{display:none;border-radius:18px;padding:12px;margin:16px 0;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;font-size:14px}.notice.warn{display:block;background:var(--warnbg);border-color:#fcd34d;color:var(--warn)}.notice.show{display:block}.result-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:14px}.result-head h2{margin:0}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:18px}table{width:100%;min-width:900px;border-collapse:collapse;background:white}th,td{padding:12px;border-bottom:1px solid #f1f5f9;text-align:left;font-size:14px;vertical-align:top}th{background:#f8fafc;color:#64748b;font-size:12px;text-transform:uppercase}td strong{display:block}.sub{font-size:12px;color:var(--muted);margin-top:3px}.mapbox{background:white;border:1px solid var(--line);border-radius:24px;padding:14px;box-shadow:0 8px 24px rgba(15,23,42,.05)}.maphead{display:flex;justify-content:space-between;margin-bottom:8px}.maphead b{font-size:15px}.maphead span{font-size:12px;color:var(--muted)}svg{width:100%;height:340px;border-radius:16px;background:linear-gradient(135deg,#f8fafc,#e0f2fe)}.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}.mini{background:white;border:1px solid var(--line);border-radius:24px;padding:16px}.mini h3{font-size:14px;margin:0 0 12px;color:#475569}.kv{display:flex;justify-content:space-between;border-bottom:1px dashed #e2e8f0;padding:8px 0;font-size:14px}.kv:last-child{border-bottom:0}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#e0f2fe;color:#075985;font-size:12px;font-weight:800}.muted{color:var(--muted);font-size:13px;line-height:1.7}.danger-text{color:#be123c}.footer-note{color:#64748b;font-size:12px;line-height:1.7;margin-top:14px}@media(max-width:980px){.hero-grid,.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.cards3{grid-template-columns:1fr}.wrap{padding:12px}.hero h1{font-size:28px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="badge">🚗 MoveWise MVP</div>
+        <h1>移動最適化スケジューラー</h1>
+        <p>出発地・目的地・滞在時間から、訪問順、移動時間、到着予定、出発予定、共有用テキストを自動作成します。外部APIなしで動く初期版です。</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><small>総距離</small><b id="sKm">-</b></div>
+        <div class="stat"><small>移動</small><b id="sMove">-</b></div>
+        <div class="stat"><small>総所要</small><b id="sTotal">-</b></div>
+        <div class="stat"><small>完了予定</small><b id="sFinish">-</b></div>
+      </div>
+    </div>
+  </section>
+  <div id="notice" class="notice"></div>
+  <div class="grid">
+    <aside>
+      <section class="card">
+        <h2>⚙️ 基本条件</h2>
+        <div class="row">
+          <label class="field"><span>出発時刻</span><input id="startTime" type="time" value="09:00"></label>
+          <label class="field"><span>移動手段</span><select id="mode"><option value="car">車</option><option value="walk">徒歩</option><option value="transit">公共交通</option></select></label>
+        </div>
+        <div class="checks">
+          <label class="check"><input id="optimize" type="checkbox" checked>訪問順を最適化する</label>
+          <label class="check"><input id="returnToStart" type="checkbox">最後に出発地へ戻る</label>
+          <label class="check"><input id="toll" type="checkbox">有料道路を使う想定で概算する</label>
+        </div>
+        <p class="muted" id="modeDesc">市街地移動を想定した概算</p>
+      </section>
+      <section class="card">
+        <h2>📍 出発地</h2>
+        <label class="field"><span>名称</span><input id="startName" value="出発地"></label>
+        <label class="field"><span>住所</span><input id="startAddress" value="福岡市中央区天神"></label>
+        <div class="row">
+          <label class="field"><span>緯度</span><input id="startLat" type="number" step="0.000001" value="33.5902"></label>
+          <label class="field"><span>経度</span><input id="startLng" type="number" step="0.000001" value="130.4017"></label>
+        </div>
+      </section>
+      <section class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h2 style="margin:0">➕ 目的地</h2><button class="btn secondary" onclick="addDestination()">追加</button></div>
+        <div id="destinations"></div>
+      </section>
+      <section class="card">
+        <h2>📋 CSV貼り付け</h2>
+        <p class="muted">形式：名称,住所,滞在分,緯度,経度,備考</p>
+        <textarea id="bulk" rows="4">天神中央公園,福岡市中央区天神1丁目,20,33.5913,130.4021
+大濠公園,福岡市中央区大濠公園,30,33.5866,130.3762</textarea>
+        <div class="btns" style="margin-top:10px"><button class="btn secondary" onclick="applyBulk()">一括反映</button><button class="btn secondary" onclick="fillEstimatedCoords()">座標概算補完</button></div>
+      </section>
+    </aside>
+    <main>
+      <section class="card">
+        <div class="result-head">
+          <div><h2>🧭 最適化結果</h2><p class="muted" id="resultDesc">距離ベースの最近傍法＋2-optで順序を算定</p></div>
+          <div class="btns"><button class="btn secondary" onclick="copyPlan()">コピー</button><button class="btn secondary" onclick="downloadCsv()">CSV</button><button class="btn teal" onclick="lineShare()">LINE共有</button></div>
+        </div>
+        <div id="coordWarn" class="notice warn" style="display:none">緯度経度が未入力の地点は概算座標で補完しています。実務利用時は、住所から取得した実座標へ置換してください。</div>
+        <div class="table-wrap"><table><thead><tr><th>順番</th><th>目的地</th><th>移動</th><th>到着</th><th>滞在</th><th>出発</th><th>料金</th><th>備考</th></tr></thead><tbody id="scheduleBody"></tbody></table></div>
+      </section>
+      <section class="mapbox">
+        <div class="maphead"><b>概略ルート図</b><span>※地図タイルなしの簡易投影図</span></div>
+        <svg id="mapSvg" viewBox="0 0 720 360"></svg>
+      </section>
+      <section class="cards3">
+        <div class="mini"><h3>⏱ 時間サマリー</h3><div class="kv"><span>移動時間</span><b id="mMove">-</b></div><div class="kv"><span>滞在時間</span><b id="mStay">-</b></div><div class="kv"><span>総所要時間</span><b id="mTotal">-</b></div></div>
+        <div class="mini"><h3>📌 距離・料金</h3><div class="kv"><span>総距離</span><b id="mKm">-</b></div><div class="kv"><span>有料道路</span><b id="mToll">-</b></div><div class="kv"><span>目的地数</span><b id="mCount">-</b></div></div>
+        <div class="mini"><h3>⚠️ 実務上の注意</h3><p class="muted">本MVPは、訪問順・時間表・共有導線を検証するための初期版です。実経路・渋滞・営業時間連携は、ルートAPI等の利用許可後に精度向上できます。</p></div>
+      </section>
+      <p class="footer-note">MoveWise MVP / Static HTML Build. 入力データはブラウザ内のみで処理され、サーバー保存は行いません。</p>
+    </main>
+  </div>
+</div>
+<script>
+const FUKUOKA_CENTER={lat:33.5902,lng:130.4017};
+const modeConfig={car:{label:'車',speedKmh:32,bufferMin:4,desc:'市街地移動を想定した概算'},walk:{label:'徒歩',speedKmh:4.8,bufferMin:1,desc:'徒歩速度4.8km/hで概算'},transit:{label:'公共交通',speedKmh:23,bufferMin:12,desc:'乗換・待機を含めた概算'}};
+let destinations=[
+{id:uid(),name:'福岡市役所',address:'福岡市中央区天神1丁目8-1',stayMin:30,lat:33.5904,lng:130.4017,note:''},
+{id:uid(),name:'博多駅',address:'福岡市博多区博多駅中央街',stayMin:20,lat:33.5897,lng:130.4207,note:''},
+{id:uid(),name:'福岡県庁',address:'福岡市博多区東公園7-7',stayMin:25,lat:33.6066,lng:130.4181,note:''}
+];
+function uid(){return Math.random().toString(36).slice(2)+Date.now().toString(36)}
+function $(id){return document.getElementById(id)}
+function pad2(n){return String(n).padStart(2,'0')}
+function minutesToTime(baseTime,off){const [h,m]=baseTime.split(':').map(Number);const base=h*60+m+off;const day=Math.floor(base/1440);const mod=((base%1440)+1440)%1440;const label=`${pad2(Math.floor(mod/60))}:${pad2(mod%60)}`;return day>0?`${label}+${day}日`:label}
+function fmt(min){min=Math.round(min);const h=Math.floor(min/60),m=min%60;return h?`${h}時間${m}分`:`${m}分`}
+function isCoord(p){return Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lng))}
+function rad(d){return d*Math.PI/180}
+function hav(a,b){if(!isCoord(a)||!isCoord(b))return 0;const R=6371,dLat=rad(Number(b.lat)-Number(a.lat)),dLng=rad(Number(b.lng)-Number(a.lng)),lat1=rad(Number(a.lat)),lat2=rad(Number(b.lat));const h=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLng/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
+function coord(seed,index){let h=0;const t=`${seed||'MoveWise'}-${index}`;for(let i=0;i<t.length;i++)h=Math.imul(31,h)+t.charCodeAt(i)|0;const n1=Math.abs(Math.sin(h)*10000)%1,n2=Math.abs(Math.cos(h)*10000)%1;return{lat:+(FUKUOKA_CENTER.lat+(n1-.5)*.13).toFixed(6),lng:+(FUKUOKA_CENTER.lng+(n2-.5)*.16).toFixed(6)}}
+function travel(a,b,mode,toll){const c=modeConfig[mode];const factor=mode==='walk'?1.18:mode==='transit'?1.35:1.28;const km=hav(a,b)*factor;let minutes=Math.ceil((km/c.speedKmh)*60+c.bufferMin);let tollYen=0;if(mode==='car'&&toll){const ok=km>=8;tollYen=ok?Math.round((320+km*32)/10)*10:0;if(ok)minutes=Math.max(4,Math.round(minutes*.82))}return{km:+km.toFixed(2),minutes,tollYen,source:'概算'}}
+function nearest(start,ds){let rest=ds.map(d=>({...d})),ordered=[],cur=start;while(rest.length){let bi=0,bd=Infinity;rest.forEach((d,i)=>{const dist=hav(cur,d);if(dist<bd){bd=dist;bi=i}});const [n]=rest.splice(bi,1);ordered.push(n);cur=n}return ordered}
+function opt2(start,ordered){if(ordered.length<4)return ordered;let route=ordered.slice(),improved=true,guard=0;const total=items=>{let s=0,prev=start;for(const item of items){s+=hav(prev,item);prev=item}return s};let best=total(route);while(improved&&guard<80){improved=false;guard++;for(let i=0;i<route.length-2;i++){for(let j=i+2;j<route.length;j++){const cand=route.slice(0,i+1).concat(route.slice(i+1,j+1).reverse(),route.slice(j+1));const sc=total(cand);if(sc+.001<best){route=cand;best=sc;improved=true}}}}return route}
+function readStart(){return{name:$('startName').value,address:$('startAddress').value,lat:numOrBlank($('startLat').value),lng:numOrBlank($('startLng').value)}}
+function numOrBlank(v){return v===''?'':Number(v)}
+function calc(){const start0=readStart();const start=isCoord(start0)?{...start0,estimated:false}:{...start0,...coord(start0.address||start0.name,0),estimated:true};const ds=destinations.filter(d=>d.name||d.address).map((d,i)=>isCoord(d)?{...d,lat:Number(d.lat),lng:Number(d.lng),estimated:false}:{...d,...coord(d.address||d.name,i+1),estimated:true});const mode=$('mode').value,toll=$('toll').checked,returnToStart=$('returnToStart').checked,optimize=$('optimize').checked,startTime=$('startTime').value||'09:00';const ordered=optimize?opt2(start,nearest(start,ds)):ds;let rows=[],elapsed=0,cur=start,totalKm=0,totalMove=0,totalStay=0,totalToll=0;ordered.forEach((dest,i)=>{const mv=travel(cur,dest,mode,toll);const arr=elapsed+mv.minutes,dep=arr+Number(dest.stayMin||0);rows.push({index:i+1,from:i===0?(start.name||'出発地'):(ordered[i-1].name||`目的地${i}`),to:dest.name||dest.address||`目的地${i+1}`,address:dest.address||'',note:dest.note||'',moveKm:mv.km,moveMin:mv.minutes,tollYen:mv.tollYen,arrive:minutesToTime(startTime,arr),stayMin:Number(dest.stayMin||0),depart:minutesToTime(startTime,dep),lat:dest.lat,lng:dest.lng,estimated:dest.estimated,source:mv.source});elapsed=dep;totalKm+=mv.km;totalMove+=mv.minutes;totalStay+=Number(dest.stayMin||0);totalToll+=mv.tollYen;cur=dest});if(returnToStart&&ordered.length){const mv=travel(cur,start,mode,toll);elapsed+=mv.minutes;totalKm+=mv.km;totalMove+=mv.minutes;totalToll+=mv.tollYen;rows.push({index:'帰着',from:cur.name||'最終目的地',to:start.name||'出発地',address:start.address||'',note:'帰着',moveKm:mv.km,moveMin:mv.minutes,tollYen:mv.tollYen,arrive:minutesToTime(startTime,elapsed),stayMin:0,depart:'-',lat:start.lat,lng:start.lng,estimated:start.estimated,source:mv.source})}return{start,ordered,rows,totals:{km:+totalKm.toFixed(2),moveMin:totalMove,stayMin:totalStay,totalMin:totalMove+totalStay,tollYen:totalToll,finish:minutesToTime(startTime,totalMove+totalStay)}}}
+function renderDests(){const box=$('destinations');box.innerHTML='';destinations.forEach((d,i)=>{const div=document.createElement('div');div.className='dest';div.innerHTML=`<div class="dest-head"><span>目的地 ${i+1}</span><button class="btn danger" onclick="removeDestination('${d.id}')">削除</button></div><input placeholder="名称" value="${escAttr(d.name)}" oninput="updateDestination('${d.id}','name',this.value)"><div style="height:8px"></div><input placeholder="住所" value="${escAttr(d.address)}" oninput="updateDestination('${d.id}','address',this.value)"><div style="height:8px"></div><div class="row"><input type="number" placeholder="滞在分" value="${escAttr(d.stayMin)}" oninput="updateDestination('${d.id}','stayMin',Number(this.value))"><input type="number" step="0.000001" placeholder="緯度" value="${escAttr(d.lat)}" oninput="updateDestination('${d.id}','lat',this.value===''?'':Number(this.value))"></div><div style="height:8px"></div><div class="row"><input type="number" step="0.000001" placeholder="経度" value="${escAttr(d.lng)}" oninput="updateDestination('${d.id}','lng',this.value===''?'':Number(this.value))"><input placeholder="備考" value="${escAttr(d.note)}" oninput="updateDestination('${d.id}','note',this.value)"></div>`;box.appendChild(div)})}
+function escAttr(s){return String(s??'').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;')}
+function updateDestination(id,key,val){destinations=destinations.map(d=>d.id===id?{...d,[key]:val}:d);render()}
+function addDestination(){destinations.push({id:uid(),name:'',address:'',stayMin:20,lat:'',lng:'',note:''});renderDests();render()}
+function removeDestination(id){destinations=destinations.filter(d=>d.id!==id);renderDests();render()}
+function applyBulk(){const lines=$('bulk').value.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);if(!lines.length)return;destinations=lines.map((line,i)=>{const [name,address,stay,lat,lng,note]=line.split(',').map(v=>(v||'').trim());return{id:uid(),name:name||`目的地${i+1}`,address,stayMin:Number(stay||20),lat:lat?Number(lat):'',lng:lng?Number(lng):'',note:note||''}});showNotice(`${destinations.length}件を一括反映しました。`);renderDests();render()}
+function fillEstimatedCoords(){const s=readStart();if(!isCoord(s)){const c=coord(s.address||s.name,0);$('startLat').value=c.lat;$('startLng').value=c.lng}destinations=destinations.map((d,i)=>isCoord(d)?d:{...d,...coord(d.address||d.name,i+1)});showNotice('未入力の緯度経度を福岡市周辺の概算座標で補完しました。実務利用時は実座標へ置換してください。');renderDests();render()}
+function showNotice(t){const n=$('notice');n.textContent=t;n.className='notice show';setTimeout(()=>{n.className='notice'},6000)}
+function render(){const sc=calc();$('modeDesc').textContent=modeConfig[$('mode').value].desc;$('resultDesc').textContent=$('optimize').checked?'距離ベースの最近傍法＋2-optで順序を算定':'入力順で算定';$('sKm').textContent=sc.totals.km+'km';$('sMove').textContent=fmt(sc.totals.moveMin);$('sTotal').textContent=fmt(sc.totals.totalMin);$('sFinish').textContent=sc.totals.finish;$('mKm').textContent=sc.totals.km+'km';$('mMove').textContent=fmt(sc.totals.moveMin);$('mStay').textContent=fmt(sc.totals.stayMin);$('mTotal').textContent=fmt(sc.totals.totalMin);$('mToll').textContent=sc.totals.tollYen?`約${sc.totals.tollYen.toLocaleString()}円`:'-';$('mCount').textContent=sc.ordered.length+'件';$('coordWarn').style.display=(sc.rows.some(r=>r.estimated)||sc.start.estimated)?'block':'none';const body=$('scheduleBody');body.innerHTML=sc.rows.map(r=>`<tr><td><b>${r.index}</b></td><td><strong>${esc(r.to)}</strong><div class="sub">${esc(r.address)}</div></td><td>${r.moveKm}km / ${r.moveMin}分<div class="sub">${r.source}</div></td><td><b>${r.arrive}</b></td><td>${r.stayMin}分</td><td><b>${r.depart}</b></td><td>${r.tollYen?`約${r.tollYen.toLocaleString()}円`:'-'}</td><td>${esc(r.note)}</td></tr>`).join('');drawMap(sc)}
+function esc(s){return String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')}
+function drawMap(sc){const svg=$('mapSvg'),w=720,h=360,pad=34;const points=[sc.start,...sc.ordered].filter(isCoord);if(!points.length){svg.innerHTML='';return}const minLat=Math.min(...points.map(p=>Number(p.lat))),maxLat=Math.max(...points.map(p=>Number(p.lat))),minLng=Math.min(...points.map(p=>Number(p.lng))),maxLng=Math.max(...points.map(p=>Number(p.lng)));const pr=p=>({x:pad+((Number(p.lng)-minLng)/Math.max(.001,maxLng-minLng))*(w-pad*2),y:h-pad-((Number(p.lat)-minLat)/Math.max(.001,maxLat-minLat))*(h-pad*2)});const line=[sc.start,...sc.ordered].map(pr).map(p=>`${p.x},${p.y}`).join(' ');let html=`<defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(100,116,139,.18)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#grid)"/><polyline points="${line}" fill="none" stroke="#0f766e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".86"/>`;[sc.start,...sc.ordered].forEach((p,i)=>{const q=pr(p),start=i===0;html+=`<g><circle cx="${q.x}" cy="${q.y}" r="${start?13:11}" fill="${start?'#0f172a':'#0ea5e9'}" opacity=".96"/><circle cx="${q.x}" cy="${q.y}" r="${start?5:4}" fill="white"/><text x="${q.x+14}" y="${q.y-12}" font-size="14" font-weight="800" fill="#1e293b">${start?'S':i}</text><text x="${q.x+14}" y="${q.y+7}" font-size="11" fill="#475569">${esc((p.name||p.address||'地点').slice(0,16))}</text></g>`});svg.innerHTML=html}
+function csvEsc(v){const s=String(v??'');return /[",\n]/.test(s)?'"'+s.replaceAll('"','""')+'"':s}
+function csv(){const sc=calc();const header=['順番','出発元','目的地','住所','移動距離km','移動時間分','到着予定','滞在分','出発予定','有料道路概算円','備考','座標推定'];const rows=sc.rows.map(r=>[r.index,r.from,r.to,r.address,r.moveKm,r.moveMin,r.arrive,r.stayMin,r.depart,r.tollYen,r.note,r.estimated?'推定':'入力値'].map(csvEsc).join(','));return '\uFEFF'+[header.join(','),...rows].join('\n')}
+function downloadCsv(){const blob=new Blob([csv()],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='MoveWise_移動計画.csv';a.click();URL.revokeObjectURL(url)}
+function shareText(){const sc=calc(),mode=$('mode').value;return ['MoveWise 移動計画',`移動手段：${modeConfig[mode].label}`,`総距離：約${sc.totals.km}km / 総所要：${fmt(sc.totals.totalMin)} / 完了予定：${sc.totals.finish}`,'',...sc.rows.map(r=>`${r.index}. ${r.to}｜到着 ${r.arrive}｜滞在 ${r.stayMin}分｜出発 ${r.depart}`)].join('\n')}
+async function copyPlan(){await navigator.clipboard.writeText(shareText());showNotice('移動計画をクリップボードにコピーしました。')}
+function lineShare(){window.open('https://line.me/R/msg/text/?'+encodeURIComponent(shareText()),'_blank','noopener,noreferrer')}
+['startTime','mode','optimize','returnToStart','toll','startName','startAddress','startLat','startLng'].forEach(id=>$(id).addEventListener('input',render));
+renderDests();render();
+</script>
+</body>
+</html>
