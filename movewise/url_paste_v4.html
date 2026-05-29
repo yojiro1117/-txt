@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoveWise｜Googleルート修正版</title>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#eef2f7;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a}.loading{padding:24px}.err{margin:24px;padding:16px;border-radius:14px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239}.spinner{display:inline-block;width:18px;height:18px;border:3px solid #cbd5e1;border-top-color:#0f766e;border-radius:50%;animation:spin 1s linear infinite;vertical-align:-4px;margin-right:8px}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="loading"><span class="spinner"></span>MoveWiseを読み込み中です...</div>
+<script>
+(async()=>{
+  const baseUrl='https://rawcdn.githack.com/yojiro1117/-txt/8405031f5070a7386a790d72de8ca1a96c131d6a/movewise/url_paste_v3.html';
+  const patch=`
+<script>
+(function(){
+  function _coord(p){return Number(p.lat).toFixed(6)+','+Number(p.lng).toFixed(6)}
+  function _isCoord(p){return p&&p.lat!==''&&p.lng!==''&&Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lng))}
+  function _label(p){return (p&&((p.name||'')+' '+(p.address||''))).trim()}
+  window.buildGoogleRouteUrl=function(){
+    const c=calc();
+    const pts=[c.start,...c.ordered].filter(_isCoord);
+    if(pts.length<2)return null;
+    // 従来の maps/dir/?api=1&waypoints=... は、Google側で近隣POIへ置換されやすく、
+    // 表示上で「税理士法人」「駐車場」等に化けるため、座標パス形式を優先する。
+    const path=pts.map(p=>encodeURIComponent(_coord(p))).join('/');
+    const center=pts[0];
+    return 'https://www.google.com/maps/dir/'+path+'/@'+_coord(center)+',12z/data=!3m1!4b1!4m2!4m1!3e0';
+  };
+  window.openGoogleRoute=function(){
+    const url=buildGoogleRouteUrl();
+    if(!url){notice('出発地と目的地の座標が必要です。');return;}
+    try{navigator.clipboard&&navigator.clipboard.writeText(url).catch(()=>{});}catch(e){}
+    window.open(url,'_blank','noopener,noreferrer');
+    notice('座標固定形式でGoogleルートを開きました。Google側の表示名が近隣施設名に変わる場合がありますが、経由点は座標で指定しています。URLはクリップボードにもコピーしています。');
+  };
+  window.copyGoogleRouteUrl=function(){
+    const url=buildGoogleRouteUrl();
+    if(!url){notice('出発地と目的地の座標が必要です。');return;}
+    navigator.clipboard.writeText(url).then(()=>notice('GoogleルートURLをコピーしました。'),()=>prompt('このURLをコピーしてください',url));
+  };
+  const oldRenderMiniRoute=window.renderMiniRoute;
+  window.renderMiniRoute=function(c){
+    oldRenderMiniRoute(c);
+    const routeBox=document.getElementById('routeMini');
+    if(routeBox && c && c.rows && c.rows.length){
+      const tools=routeBox.querySelector('.routeTools');
+      if(tools && !document.getElementById('copyGoogleRouteUrlBtn')){
+        const b=document.createElement('button');
+        b.id='copyGoogleRouteUrlBtn';
+        b.className='btn secondary mini';
+        b.textContent='GoogleルートURLコピー';
+        b.onclick=copyGoogleRouteUrl;
+        tools.appendChild(b);
+      }
+    }
+  };
+  if(typeof render==='function')render();
+  if(typeof notice==='function')notice('GoogleルートURL生成を座標固定形式へ修正しました。');
+})();
+<\/script>`;
+  try{
+    let html=await (await fetch(baseUrl,{cache:'no-store'})).text();
+    html=html.replace('この順でGoogleルートを開く','この順でGoogleルートを開く（座標固定）');
+    html=html.replace('</body>',patch+'</body>');
+    document.open();document.write(html);document.close();
+  }catch(e){
+    document.body.innerHTML='<div class="err"><b>読み込みに失敗しました。</b><br>ブラウザを更新してください。<br>'+String(e)+'</div>';
+  }
+})();
+</script>
+</body>
+</html>
