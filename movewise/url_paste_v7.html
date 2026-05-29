@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoveWise｜Googleルート名称優先版 v7</title>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#eef2f7;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a}.loading{padding:24px}.err{margin:24px;padding:16px;border-radius:14px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239}.spinner{display:inline-block;width:18px;height:18px;border:3px solid #cbd5e1;border-top-color:#0f766e;border-radius:50%;animation:spin 1s linear infinite;vertical-align:-4px;margin-right:8px}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="loading"><span class="spinner"></span>MoveWiseを読み込み中です...</div>
+<script>
+(async()=>{
+  const baseUrl='https://rawcdn.githack.com/yojiro1117/-txt/85baeb9d16d75690daea83d0d7da0fec25950ab8/movewise/url_paste_v6.html';
+  const patch=`
+<script>
+(function(){
+  function _isCoord(p){return p&&p.lat!==''&&p.lng!==''&&Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lng))}
+  function _coord(p){return Number(p.lat).toFixed(6)+','+Number(p.lng).toFixed(6)}
+  function _clean(s){return String(s||'').replace(/\\s+/g,' ').trim()}
+  function _routeLabel(p){
+    const name=_clean(p.name);
+    const address=_clean(p.address);
+    if(name && address) return name+' '+address;
+    if(name) return name;
+    if(address) return address;
+    if(_isCoord(p)) return _coord(p);
+    return '';
+  }
+  window.buildGoogleRouteUrlByName=function(){
+    const c=calc();
+    const pts=[c.start].concat(c.ordered).filter(function(p){return _routeLabel(p)});
+    if(pts.length<2)return null;
+    const path=pts.map(function(p){return encodeURIComponent(_routeLabel(p))}).join('/');
+    const center=_isCoord(pts[0])?('/@'+_coord(pts[0])+',12z'):'';
+    // 表示名を優先するURL。Google側の左パネルにMoveWiseの名称・住所が残りやすい。
+    // ルート順はURL内の path 順に固定する。
+    return 'https://www.google.com/maps/dir/'+path+center+'/data=!3m1!4b1!4m2!4m1!3e0';
+  };
+  window.buildGoogleRouteUrlByCoords=function(){
+    const c=calc();
+    const pts=[c.start].concat(c.ordered).filter(_isCoord);
+    if(pts.length<2)return null;
+    const path=pts.map(function(p){return encodeURIComponent(_coord(p))}).join('/');
+    return 'https://www.google.com/maps/dir/'+path+'/@'+_coord(pts[0])+',12z/data=!3m1!4b1!4m2!4m1!3e0';
+  };
+  window.openGoogleRoute=function(){
+    const url=buildGoogleRouteUrlByName() || buildGoogleRouteUrlByCoords();
+    if(!url){notice('出発地と目的地の名称・住所または座標が必要です。');return;}
+    try{navigator.clipboard&&navigator.clipboard.writeText(url).catch(function(){});}catch(e){}
+    window.open(url,'_blank','noopener,noreferrer');
+    notice('名称・住所優先形式でGoogleルートを開きました。表示がずれる場合は「座標固定URLコピー」を使ってください。');
+  };
+  window.copyGoogleRouteUrl=function(){
+    const url=buildGoogleRouteUrlByName() || buildGoogleRouteUrlByCoords();
+    if(!url){notice('出発地と目的地の名称・住所または座標が必要です。');return;}
+    navigator.clipboard.writeText(url).then(function(){notice('名称・住所優先のGoogleルートURLをコピーしました。')},function(){prompt('このURLをコピーしてください',url)});
+  };
+  window.copyGoogleRouteCoordUrl=function(){
+    const url=buildGoogleRouteUrlByCoords();
+    if(!url){notice('座標が必要です。');return;}
+    navigator.clipboard.writeText(url).then(function(){notice('座標固定のGoogleルートURLをコピーしました。')},function(){prompt('このURLをコピーしてください',url)});
+  };
+  const oldRenderMiniRoute=window.renderMiniRoute;
+  if(oldRenderMiniRoute){
+    window.renderMiniRoute=function(c){
+      oldRenderMiniRoute(c);
+      const routeBox=document.getElementById('routeMini');
+      if(routeBox && c && c.rows && c.rows.length){
+        const tools=routeBox.querySelector('.routeTools');
+        if(tools){
+          const mainBtn=[].slice.call(tools.querySelectorAll('button')).find(function(b){return /Googleルート/.test(b.textContent)});
+          if(mainBtn) mainBtn.textContent='この順でGoogleルートを開く（名称優先）';
+          if(!document.getElementById('copyGoogleRouteCoordUrlBtn')){
+            const b=document.createElement('button');
+            b.id='copyGoogleRouteCoordUrlBtn';
+            b.className='btn secondary mini';
+            b.textContent='座標固定URLコピー';
+            b.onclick=copyGoogleRouteCoordUrl;
+            tools.appendChild(b);
+          }
+        }
+      }
+    };
+  }
+  if(typeof render==='function')render();
+  if(typeof notice==='function')notice('v7を適用しました。Googleルートは名称・住所優先で開き、座標固定URLもコピーできます。');
+})();
+<\/script>`;
+  try{
+    let html=await (await fetch(baseUrl,{cache:'no-store'})).text();
+    html=html.replace('この順でGoogleルートを開く（座標固定）','この順でGoogleルートを開く（名称優先）');
+    html=html.replace('</body>',patch+'</body>');
+    document.open();document.write(html);document.close();
+  }catch(e){
+    document.body.innerHTML='<div class="err"><b>読み込みに失敗しました。</b><br>ブラウザを更新してください。<br>'+String(e)+'</div>';
+  }
+})();
+</script>
+</body>
+</html>
