@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoveWise v10</title>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#eef2f7;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a}.loading{padding:24px}.err{margin:24px;padding:16px;border-radius:14px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239}.spinner{display:inline-block;width:18px;height:18px;border:3px solid #cbd5e1;border-top-color:#0f766e;border-radius:50%;animation:spin 1s linear infinite;vertical-align:-4px;margin-right:8px}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="loading"><span class="spinner"></span>MoveWise v10を読み込み中です...</div>
+<script>
+(async()=>{
+  const baseUrl='https://rawcdn.githack.com/yojiro1117/-txt/d99c2a6b161c54277873a75085e116118a7e0909/movewise/url_paste_v8.html';
+  try{
+    let html=await (await fetch(baseUrl,{cache:'no-store'})).text();
+    html=html.replace('MoveWise v8','MoveWise v10');
+    html=html.replace('v8安定版：外部HTML読込を廃止し、GoogleマップURL貼付・住所逆引き・名称優先ルートを直接実装しています。','v10安定版：最終目的地を選択して固定し、それ以外の訪問順だけを最適化できます。出発地が「現在地」の場合、Googleルートも現在地始点で開きます。');
+    html=html.replace('この順でGoogleルートを開く（名称優先）','この順でGoogleルートを開く（現在地対応）');
+    html=html.replace(
+      '<label class="check"><input id="returnToStart" type="checkbox">最後に出発地へ戻る</label>',
+      '<label class="check"><input id="returnToStart" type="checkbox">最後に出発地へ戻る</label><label class="check"><input id="lockFinal" type="checkbox" checked>最終目的地を固定</label><label class="field"><span>固定する最終目的地</span><select id="finalDestId"></select></label>'
+    );
+    html=html.replace(
+      /function labelForRoute\(p\)\{[^}]*?return ''\}/,
+      "function labelForRoute(p,idx){let name=String(p.name||'').trim(),addr=String(p.address||'').trim();if(idx===0&&typeof isCurrent==='function'&&isCurrent(name))return '現在地';if(name&&addr)return name+' '+addr;if(name)return name;if(addr)return addr;if(isCoord(p))return Number(p.lat).toFixed(6)+','+Number(p.lng).toFixed(6);return ''}"
+    );
+    html=html.replace(
+      /function routeByNames\(\)\{let c=calc\(\),pts=\[c\.start,\.\.\.c\.ordered\]\.filter\(p=>labelForRoute\(p\)\);if\(pts\.length<2\)return null;let path=pts\.map\(p=>encodeURIComponent\(labelForRoute\(p\)\)\)\.join\('\/'\);return 'https:\/\/www\.google\.com\/maps\/dir\/'+path+'\/data=!3m1!4b1!4m2!4m1!3e0'\}/,
+      "function routeByNames(){let c=calc(),raw=[c.start,...c.ordered],labels=raw.map((p,i)=>labelForRoute(p,i)).filter(Boolean);if(labels.length<2)return null;let path=labels.map(x=>encodeURIComponent(x)).join('/');return 'https://www.google.com/maps/dir/'+path+'/data=!3m1!4b1!4m2!4m1!3e0'}"
+    );
+    html=html.replace(
+      'function optimizedOrder(start,ds){return twoOpt(start,nearestOrder(start,ds))}',
+      "function optimizedOrder(start,ds){return twoOpt(start,nearestOrder(start,ds))}\nfunction renderFinalOptions(){let sel=$('finalDestId');if(!sel)return;let prev=sel.value;sel.innerHTML=destinations.map((d,i)=>`<option value=\"${d.id}\">${i+1}. ${(d.name||d.address||'目的地 '+(i+1)).slice(0,28)}</option>`).join('');if(destinations.some(d=>d.id===prev))sel.value=prev;else if(destinations.length)sel.value=destinations[destinations.length-1].id;}\nfunction orderWithFinalLock(start,ds){if(!$('optimize').checked)return ds;let lock=$('lockFinal')&&$('lockFinal').checked;let fid=$('finalDestId')?$('finalDestId').value:'';if(lock&&fid){let final=ds.find(d=>d.id===fid);if(final){let rest=ds.filter(d=>d.id!==fid);return optimizedOrder(start,rest).concat([final]);}}return optimizedOrder(start,ds)}"
+    );
+    html=html.replace(
+      "let ord=$('optimize').checked?optimizedOrder(start,ds):ds,totalLegs=ord.length+($('returnToStart').checked&&ord.length?1:0)",
+      "let ord=orderWithFinalLock(start,ds),totalLegs=ord.length+($('returnToStart').checked&&ord.length?1:0)"
+    );
+    html=html.replace(
+      "function render(){let c=calc();",
+      "function render(){if(typeof renderFinalOptions==='function')renderFinalOptions();let c=calc();"
+    );
+    html=html.replace(
+      "['startTime','mode','optimize','returnToStart','toll','onlineLookup','tollAmount','startLat','startLng'].forEach(id=>$(id).addEventListener('input',render));",
+      "['startTime','mode','optimize','returnToStart','lockFinal','finalDestId','toll','onlineLookup','tollAmount','startLat','startLng'].forEach(id=>{let el=$(id);if(el)el.addEventListener('input',render);});"
+    );
+    html=html.replace(
+      "notice('名称・住所優先でGoogleルートを開きました。URLもコピーしています。')",
+      "notice('最終目的地固定の順番でGoogleルートを開きました。出発地が「現在地」の場合はGoogle側も現在地始点です。URLもコピーしています。')"
+    );
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(e){
+    document.body.innerHTML='<div class="err"><b>読み込みに失敗しました。</b><br>ブラウザを更新してください。<br>'+String(e)+'</div>';
+  }
+})();
+</script>
+</body>
+</html>
