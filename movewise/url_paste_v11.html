@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoveWise v11</title>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#eef2f7;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a}.loading{padding:24px}.err{margin:24px;padding:16px;border-radius:14px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239}.spinner{display:inline-block;width:18px;height:18px;border:3px solid #cbd5e1;border-top-color:#0f766e;border-radius:50%;animation:spin 1s linear infinite;vertical-align:-4px;margin-right:8px}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="loading"><span class="spinner"></span>MoveWise v11を読み込み中です...</div>
+<script>
+(async()=>{
+  const baseUrl='https://rawcdn.githack.com/yojiro1117/-txt/d99c2a6b161c54277873a75085e116118a7e0909/movewise/url_paste_v8.html';
+  const patch=`
+<script>
+(function(){
+  var dragDestId=null;
+  function addV11Styles(){
+    if(document.getElementById('v11Style'))return;
+    var st=document.createElement('style');
+    st.id='v11Style';
+    st.textContent='.routeModePanel{background:#f8fafc;border:1px solid #dbeafe;border-radius:14px;padding:10px;margin:8px 0 10px}.routeModeTitle{font-size:13px;font-weight:900;margin-bottom:8px;color:#0f172a}.routeModeBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.routeModeBtns label{display:flex;align-items:center;justify-content:center;text-align:center;min-height:46px;border:2px solid #e2e8f0;border-radius:14px;background:#fff;color:#0f172a;font-size:14px;font-weight:900;cursor:pointer;line-height:1.25}.routeModeBtns label.active{background:#0f766e;color:#fff;border-color:#0f766e;box-shadow:0 6px 16px rgba(15,118,110,.22)}.routeModeBtns input{display:none}.modeHint{font-size:11px;color:#64748b;margin-top:7px;line-height:1.45}.dragHandle{font-size:11px;font-weight:900;color:#0f766e;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:999px;padding:4px 8px;margin-right:7px;cursor:grab;user-select:none}.dest.dragging{opacity:.45;outline:3px dashed #0ea5e9}.dest.dragOver{outline:3px solid #14b8a6;background:#f0fdfa}.finalLockPanel{margin-top:8px;padding:8px;background:#fff;border:1px dashed #cbd5e1;border-radius:12px}.finalLockPanel .field{margin-top:6px;margin-bottom:0}';
+    document.head.appendChild(st);
+  }
+  function syncRouteModeUI(){
+    var opt=document.getElementById('optimize');
+    var labels=document.querySelectorAll('.routeModeBtns label');
+    labels.forEach(function(l){l.classList.remove('active')});
+    var mode=opt&&opt.checked?'optimize':'manual';
+    var target=document.querySelector('.routeModeBtns input[value="'+mode+'"]');
+    if(target){target.checked=true;target.parentElement.classList.add('active')}
+  }
+  function installRouteModeUI(){
+    addV11Styles();
+    var opt=document.getElementById('optimize');
+    if(!opt||document.getElementById('routeModePanel'))return;
+    var optLabel=opt.closest('label');
+    if(optLabel)optLabel.style.display='none';
+    var panel=document.createElement('div');
+    panel.id='routeModePanel';
+    panel.className='routeModePanel';
+    panel.innerHTML='<div class="routeModeTitle">訪問順モード</div><div class="routeModeBtns"><label><input type="radio" name="routeMode" value="optimize">最適化<br>モード</label><label><input type="radio" name="routeMode" value="manual">入力順固定<br>モード</label></div><div class="modeHint">入力順固定モードでは、目的地カードをドラッグ＆ドロップした順番がそのままルートになります。</div>';
+    if(optLabel)optLabel.parentElement.insertBefore(panel,optLabel);
+    panel.querySelectorAll('input[name="routeMode"]').forEach(function(r){
+      r.addEventListener('change',function(){
+        opt.checked=(this.value==='optimize');
+        syncRouteModeUI();
+        render();
+      });
+    });
+    syncRouteModeUI();
+  }
+  function installFinalLockUI(){
+    if(document.getElementById('finalLockPanel'))return;
+    var ret=document.getElementById('returnToStart');
+    if(!ret)return;
+    var retLabel=ret.closest('label');
+    var panel=document.createElement('div');
+    panel.id='finalLockPanel';
+    panel.className='finalLockPanel';
+    panel.innerHTML='<label class="check"><input id="lockFinal" type="checkbox" checked>最終目的地を固定</label><label class="field"><span>固定する最終目的地</span><select id="finalDestId"></select></label><div class="modeHint">最適化モード時のみ、選択した目的地を最後に固定します。</div>';
+    retLabel.parentElement.insertBefore(panel,retLabel.nextSibling);
+    panel.querySelector('#lockFinal').addEventListener('input',render);
+    panel.querySelector('#finalDestId').addEventListener('input',render);
+  }
+  window.renderFinalOptions=function(){
+    var sel=document.getElementById('finalDestId');
+    if(!sel)return;
+    var prev=sel.value;
+    sel.innerHTML=destinations.map(function(d,i){
+      var label=(i+1)+'. '+String(d.name||d.address||('目的地 '+(i+1))).slice(0,30);
+      return '<option value="'+d.id+'">'+label.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})+'</option>';
+    }).join('');
+    if(destinations.some(function(d){return d.id===prev}))sel.value=prev;
+    else if(destinations.length)sel.value=destinations[destinations.length-1].id;
+  };
+  function enhanceDestCards(){
+    var cards=document.querySelectorAll('#destinations .dest');
+    cards.forEach(function(card,i){
+      var d=destinations[i];
+      if(!d)return;
+      card.setAttribute('draggable','true');
+      card.dataset.destId=d.id;
+      var head=card.querySelector('.destHead');
+      if(head&&!head.querySelector('.dragHandle')){
+        var h=document.createElement('span');
+        h.className='dragHandle';
+        h.textContent='↕ ドラッグ';
+        head.insertBefore(h,head.firstChild);
+      }
+      card.addEventListener('dragstart',function(e){dragDestId=this.dataset.destId;this.classList.add('dragging');e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',dragDestId)}catch(x){}});
+      card.addEventListener('dragend',function(){this.classList.remove('dragging');document.querySelectorAll('.dest.dragOver').forEach(function(x){x.classList.remove('dragOver')});dragDestId=null;});
+      card.addEventListener('dragover',function(e){e.preventDefault();this.classList.add('dragOver');e.dataTransfer.dropEffect='move';});
+      card.addEventListener('dragleave',function(){this.classList.remove('dragOver')});
+      card.addEventListener('drop',function(e){
+        e.preventDefault();
+        this.classList.remove('dragOver');
+        var fromId=dragDestId||e.dataTransfer.getData('text/plain');
+        var toId=this.dataset.destId;
+        if(!fromId||!toId||fromId===toId)return;
+        var from=destinations.findIndex(function(x){return x.id===fromId});
+        var to=destinations.findIndex(function(x){return x.id===toId});
+        if(from<0||to<0)return;
+        var moved=destinations.splice(from,1)[0];
+        destinations.splice(to,0,moved);
+        if(typeof notice==='function')notice('目的地の入力順を入れ替えました。入力順固定モードではこの順番でルート化します。');
+        renderDests();
+        render();
+      });
+    });
+  }
+  var oldRenderDests=window.renderDests;
+  if(oldRenderDests){
+    window.renderDests=function(){
+      oldRenderDests();
+      enhanceDestCards();
+      renderFinalOptions();
+    };
+  }
+  var oldOptimizedOrder=window.optimizedOrder;
+  window.optimizedOrder=function(start,ds){
+    var lock=document.getElementById('lockFinal')&&document.getElementById('lockFinal').checked;
+    var fid=document.getElementById('finalDestId')?document.getElementById('finalDestId').value:'';
+    if(lock&&fid){
+      var final=ds.find(function(d){return d.id===fid});
+      if(final){
+        var rest=ds.filter(function(d){return d.id!==fid});
+        return (oldOptimizedOrder?oldOptimizedOrder(start,rest):rest).concat([final]);
+      }
+    }
+    return oldOptimizedOrder?oldOptimizedOrder(start,ds):ds;
+  };
+  function labelForRouteV11(p,idx){
+    var name=String(p.name||'').trim(),addr=String(p.address||'').trim();
+    if(idx===0&&typeof isCurrent==='function'&&isCurrent(name))return '現在地';
+    if(name&&addr)return name+' '+addr;
+    if(name)return name;
+    if(addr)return addr;
+    if(typeof isCoord==='function'&&isCoord(p))return Number(p.lat).toFixed(6)+','+Number(p.lng).toFixed(6);
+    return '';
+  }
+  window.routeByNames=function(){
+    var c=calc(),raw=[c.start].concat(c.ordered),labels=raw.map(function(p,i){return labelForRouteV11(p,i)}).filter(Boolean);
+    if(labels.length<2)return null;
+    return 'https://www.google.com/maps/dir/'+labels.map(encodeURIComponent).join('/')+'/data=!3m1!4b1!4m2!4m1!3e0';
+  };
+  window.openGoogleRoute=function(){
+    var url=routeByNames()||(typeof routeByCoords==='function'?routeByCoords():null);
+    if(!url){notice('出発地と目的地の名称・住所または座標が必要です。');return;}
+    try{navigator.clipboard&&navigator.clipboard.writeText(url).catch(function(){})}catch(e){}
+    window.open(url,'_blank','noopener,noreferrer');
+    notice('現在の訪問順モード・最終目的地固定設定どおりにGoogleルートを開きました。URLもコピーしています。');
+  };
+  var oldRender=window.render;
+  if(oldRender){
+    window.render=function(){
+      installRouteModeUI();
+      installFinalLockUI();
+      renderFinalOptions();
+      syncRouteModeUI();
+      oldRender();
+    };
+  }
+  installRouteModeUI();
+  installFinalLockUI();
+  if(typeof renderDests==='function')renderDests();
+  if(typeof render==='function')render();
+  if(typeof notice==='function')notice('v11を適用しました。大きめのモード切替とドラッグ＆ドロップ並べ替えに対応しました。');
+})();
+<\/script>`;
+  try{
+    let html=await (await fetch(baseUrl,{cache:'no-store'})).text();
+    html=html.replace('MoveWise v8','MoveWise v11');
+    html=html.replace('v8安定版：外部HTML読込を廃止し、GoogleマップURL貼付・住所逆引き・名称優先ルートを直接実装しています。','v11安定版：大きめの訪問順モード切替、最終目的地固定、ドラッグ＆ドロップ並べ替えに対応しました。');
+    html=html.replace('</body>',patch+'</body>');
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(e){
+    document.body.innerHTML='<div class="err"><b>読み込みに失敗しました。</b><br>ブラウザを更新してください。<br>'+String(e)+'</div>';
+  }
+})();
+</script>
+</body>
+</html>
