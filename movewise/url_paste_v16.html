@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoveWise v16</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#eef2f7;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a}#wrap{width:100%;height:100%;position:relative}#appFrame{width:100%;height:100%;border:0;display:block}.boot{position:absolute;left:18px;top:18px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;box-shadow:0 8px 24px #0f172a1a;font-size:14px;z-index:3}.spinner{display:inline-block;width:16px;height:16px;border:3px solid #cbd5e1;border-top-color:#0f766e;border-radius:50%;animation:spin 1s linear infinite;vertical-align:-4px;margin-right:8px}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="boot" class="boot"><span class="spinner"></span>MoveWise v16を読み込み中です...</div>
+  <iframe id="appFrame" src="https://rawcdn.githack.com/yojiro1117/-txt/02e1c569f03a84e80ff793c8a8fa2a0535e53a16/movewise/url_paste_v11.html"></iframe>
+</div>
+<script>
+(function(){
+  var frame=document.getElementById('appFrame');
+  var boot=document.getElementById('boot');
+  var injected=false;
+  var lastMapUrl='';
+  var pendingMapTimer=null;
+  function enc(s){return encodeURIComponent(String(s||'').trim())}
+  function cleanText(s){return String(s||'').replace(/\s+/g,' ').trim()}
+  function hasCoord(p){var lat=Number(p&&p.lat),lng=Number(p&&p.lng);return p&&p.lat!==''&&p.lng!==''&&Number.isFinite(lat)&&Number.isFinite(lng)&&lat!==0&&lng!==0}
+  function coord(p){return Number(p.lat).toFixed(6)+','+Number(p.lng).toFixed(6)}
+  function tryInject(){
+    if(injected)return;
+    var w,d;
+    try{w=frame.contentWindow;d=frame.contentDocument||w.document}catch(e){return}
+    if(!w||!d||!d.getElementById('mapSvg')||!d.getElementById('routeText')||!w.calc||!w.render||!w.parseRouteText){return}
+    injected=true;
+    if(boot)boot.style.display='none';
+
+    function removeSubtitle(){try{var p=d.querySelector('.top p');if(p){p.textContent='';p.style.display='none';}}catch(e){}}
+    removeSubtitle();
+
+    var style=d.createElement('style');
+    style.id='v16Style';
+    style.textContent='.gmapFrame{width:100%;height:430px;border:0;border-radius:14px;background:#e2e8f0}.gmapNote{font-size:12px;color:#64748b;margin-top:8px;line-height:1.55}.gmapTools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.gmapTools .btn{white-space:nowrap}.gmapErr{padding:14px;border:1px dashed #cbd5e1;border-radius:14px;background:#f8fafc;color:#64748b;font-size:13px}.googleExactPanel{margin-top:10px;padding:12px;border:2px solid #0f766e;border-radius:14px;background:#ecfdf5}.googleExactPanel h3{font-size:14px;margin:0 0 8px;color:#065f46}.googleExactGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.googleExactPanel .field span{font-size:11px;font-weight:900;color:#065f46}.googleExactNote{font-size:12px;color:#065f46;line-height:1.55;margin-top:8px}.googleExactWarn{margin-top:8px;padding:9px;border-radius:12px;background:#fffbeb;border:1px solid #fcd34d;color:#92400e;font-size:12px;line-height:1.55}.googleAdopted{margin:8px 0;padding:8px;border:1px solid #a7f3d0;border-radius:12px;background:#f0fdfa;color:#065f46;font-size:12px;font-weight:800}.googleExactPanel textarea{height:86px}.googleExactQuick{display:grid;grid-template-columns:1fr 1fr;gap:8px}.googleExactQuick .field{margin-bottom:6px}@media(max-width:720px){.googleExactGrid,.googleExactQuick{grid-template-columns:1fr}}';
+    d.head.appendChild(style);
+
+    function labelForEmbed(p,idx){
+      var name=cleanText(p&&p.name),addr=cleanText(p&&p.address);
+      if(hasCoord(p))return coord(p);
+      if(idx===0&&w.isCurrent&&w.isCurrent(name))return '現在地';
+      if(name&&addr)return name+' '+addr;
+      if(name)return name;
+      if(addr)return addr;
+      return '';
+    }
+    w.buildGoogleMapsEmbedUrl=function(){
+      var c=w.calc();
+      var pts=[c.start].concat(c.ordered||[]);
+      var items=pts.map(function(p,i){return labelForEmbed(p,i)}).filter(Boolean);
+      if(items.length<2)return '';
+      return 'https://maps.google.com/maps?saddr='+enc(items[0])+'&daddr='+enc(items.slice(1).join(' to:'))+'&dirflg=d&output=embed&mwseq='+enc(items.join('|'));
+    };
+    w.refreshGoogleMapPreview=function(force){
+      var iframe=d.getElementById('googleMapPreviewFrame');
+      var empty=d.getElementById('googleMapPreviewEmpty');
+      if(!iframe)return;
+      var url=w.buildGoogleMapsEmbedUrl();
+      if(!url){iframe.style.display='none';if(empty)empty.style.display='block';lastMapUrl='';return;}
+      if(empty)empty.style.display='none';
+      iframe.style.display='block';
+      if(force||url!==lastMapUrl){lastMapUrl=url;iframe.src='about:blank';setTimeout(function(){iframe.src=url;},80);}
+    };
+    w.openEmbedGoogleMapInNewTab=function(){
+      var url=w.buildGoogleMapsEmbedUrl();
+      if(!url){w.notice&&w.notice('Googleマップ表示用URLを作成できません。');return}
+      w.open(url,'_blank','noopener,noreferrer');
+    };
+    function installMapCard(){
+      if(d.getElementById('googleMapPreviewCard'))return;
+      var svg=d.getElementById('mapSvg');
+      var baseCard=svg?svg.closest('.card'):null;
+      if(!baseCard||!baseCard.parentElement)return;
+      var card=d.createElement('section');
+      card.className='card';
+      card.id='googleMapPreviewCard';
+      card.innerHTML='<div class="title"><h2>Googleマップ表示</h2><div class="gmapTools"><button class="btn secondary" id="gmapRefreshBtn">地図を更新</button><button class="btn secondary" id="gmapOpenBtn">Googleマップで開く</button><button class="btn secondary" id="gmapTabBtn">別タブで表示</button></div></div><div id="googleMapPreviewEmpty" class="gmapErr">出発地と目的地の座標または住所を入力すると、ここにGoogleマップを表示します。</div><iframe id="googleMapPreviewFrame" class="gmapFrame" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen style="display:none"></iframe><div class="gmapNote">※APIなしの通常Googleマップ埋め込みです。目的地順を変更した場合は自動更新します。正式確認は「Googleマップで開く」を使用してください。</div>';
+      baseCard.parentElement.insertBefore(card,baseCard.nextSibling);
+      d.getElementById('gmapRefreshBtn').onclick=function(){w.refreshGoogleMapPreview(true)};
+      d.getElementById('gmapOpenBtn').onclick=w.openGoogleRoute;
+      d.getElementById('gmapTabBtn').onclick=w.openEmbedGoogleMapInNewTab;
+    }
+    function parseTimeToMin(s){
+      s=String(s||'').replace(/\s+/g,'');
+      var m=s.match(/(\d+)時間(\d+)?分?/); if(m)return Number(m[1])*60+(m[2]?Number(m[2]):0);
+      m=s.match(/(\d+)分/); if(m)return Number(m[1]);
+      m=s.match(/^(\d+):(\d+)$/); if(m)return Number(m[1])*60+Number(m[2]);
+      m=s.match(/^(\d+)$/); if(m)return Number(m[1]);
+      return null;
+    }
+    function parseKm(s){
+      s=String(s||'');
+      var m=s.match(/(\d+(?:\.\d+)?)\s*km/i); if(m)return Number(m[1]);
+      m=s.match(/(\d+(?:\.\d+)?)\s*キロ/); if(m)return Number(m[1]);
+      m=s.match(/^(\d+(?:\.\d+)?)$/); if(m)return Number(m[1]);
+      return null;
+    }
+    function parseYen(s){
+      s=String(s||'');
+      var m=s.match(/(\d{1,3}(?:,\d{3})*|\d+)\s*円/); if(m)return Number(m[1].replace(/,/g,''));
+      m=s.match(/^(\d+)$/); if(m)return Number(m[1]);
+      return null;
+    }
+    function installExactPanel(){
+      if(d.getElementById('googleExactPanel'))return;
+      var rt=d.getElementById('routeText');
+      var parent=rt?rt.closest('.sidebody'):null;
+      if(!parent)return;
+      var panel=d.createElement('div');
+      panel.className='googleExactPanel';
+      panel.id='googleExactPanel';
+      panel.innerHTML='<h3>Googleマップ表示値を正として採用</h3><label class="field"><span>Googleマップからコピーした表示テキスト</span><textarea id="gExactText" placeholder="例：1時間18分\n46.5 km\nこのルートには有料区間が含まれます。"></textarea></label><div class="btns"><button class="btn teal" id="gExactTextApply">表示テキストを本アプリへ反映</button></div><div class="googleExactQuick"><label class="field"><span>Google距離</span><input id="gExactKm" placeholder="例：46.5km"></label><label class="field"><span>Google移動時間</span><input id="gExactTime" placeholder="例：1時間18分"></label></div><label class="field"><span>Google有料道路料金</span><input id="gExactToll" placeholder="例：820円 任意"></label><div class="btns"><button class="btn teal" id="gExactManualApply">手入力値を本アプリへ反映</button><button class="btn secondary" id="gExactClear">解除</button></div><div class="googleExactNote">反映後は、総距離・移動時間・総所要時間・完了予定がGoogleマップ表示値に合わせて更新されます。</div><div class="googleExactWarn">Googleマップiframe内の時間はブラウザ制限で自動読取できません。Googleマップ欄の表示値をコピーしてここへ貼り付けるか、距離・時間を手入力してください。</div>';
+      parent.appendChild(panel);
+      function applyText(txt){
+        var rt=d.getElementById('routeText');
+        rt.value=txt;
+        w.parseRouteText();
+        markApplied();
+        w.notice&&w.notice('Googleマップ表示テキストを本アプリへ反映しました。');
+      }
+      function markApplied(){
+        var route=d.getElementById('routeMini');
+        if(route&&!route.querySelector('.googleAdopted')){
+          var b=d.createElement('div');b.className='googleAdopted';b.textContent='Googleマップ表示値を正として採用中です。';route.insertBefore(b,route.firstChild);
+        }
+      }
+      d.getElementById('gExactTextApply').onclick=function(){
+        var txt=d.getElementById('gExactText').value.trim();
+        if(!txt){w.notice&&w.notice('Googleマップ表示テキストを貼り付けてください。');return;}
+        applyText(txt);
+      };
+      d.getElementById('gExactManualApply').onclick=function(){
+        var parts=[];
+        var km=d.getElementById('gExactKm').value.trim();
+        var tm=d.getElementById('gExactTime').value.trim();
+        var toll=d.getElementById('gExactToll').value.trim();
+        if(km)parts.push(km);
+        if(tm)parts.push(tm);
+        if(toll)parts.push(toll);
+        if(!parts.length){w.notice&&w.notice('Google距離またはGoogle移動時間を入力してください。');return;}
+        applyText(parts.join('\n'));
+      };
+      d.getElementById('gExactClear').onclick=function(){
+        var rt=d.getElementById('routeText');
+        rt.value='';
+        w.clearRouteOverride&&w.clearRouteOverride();
+        ['gExactText','gExactKm','gExactTime','gExactToll'].forEach(function(id){var el=d.getElementById(id);if(el)el.value='';});
+        var b=d.querySelector('.googleAdopted');if(b)b.remove();
+        w.notice&&w.notice('Google値の反映を解除しました。');
+      };
+    }
+    function scheduleMapRefresh(force){clearTimeout(pendingMapTimer);pendingMapTimer=setTimeout(function(){w.refreshGoogleMapPreview(!!force)},650);}
+
+    var oldRender=w.render;
+    w.render=function(){
+      oldRender();
+      removeSubtitle();
+      installMapCard();
+      installExactPanel();
+      scheduleMapRefresh(true);
+      if(d.getElementById('routeText')&&d.getElementById('routeText').value.trim()){
+        var route=d.getElementById('routeMini');
+        if(route&&!route.querySelector('.googleAdopted')){var b=d.createElement('div');b.className='googleAdopted';b.textContent='Googleマップ表示値を正として採用中です。';route.insertBefore(b,route.firstChild);}
+      }
+    };
+
+    var destBox=d.getElementById('destinations');
+    if(destBox){
+      var mo=new MutationObserver(function(){scheduleMapRefresh(true)});
+      mo.observe(destBox,{childList:true,subtree:true,attributes:true,attributeFilter:['data-dest-id','class']});
+      destBox.addEventListener('drop',function(){setTimeout(function(){scheduleMapRefresh(true)},300)},true);
+      destBox.addEventListener('dragend',function(){setTimeout(function(){scheduleMapRefresh(true)},300)},true);
+    }
+
+    installMapCard();
+    installExactPanel();
+    w.render();
+    w.notice&&w.notice('v16を適用しました。Google表示値の反映パネルを追加しました。');
+  }
+  frame.addEventListener('load',function(){setTimeout(tryInject,800);setTimeout(tryInject,2000);setTimeout(tryInject,4000)});
+  setInterval(function(){if(!injected)tryInject()},1500);
+})();
+</script>
+</body>
+</html>
