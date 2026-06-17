@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoveWise v19</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#eef2f7;font-family:system-ui}#appFrame{width:100%;height:100%;border:0}.boot{position:absolute;left:18px;top:18px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;box-shadow:0 8px 24px #0f172a1a;font-size:14px;z-index:3;color:#0f172a}</style>
+</head>
+<body>
+<div id="boot" class="boot">MoveWise v19を読み込み中です...</div>
+<iframe id="appFrame" src="https://rawcdn.githack.com/yojiro1117/-txt/f319a52a7a408d448d7549a19e934c1ba281e3b0/movewise/url_paste_v17.html"></iframe>
+<script>
+(function(){
+  var outerFrame=document.getElementById('appFrame');
+  var boot=document.getElementById('boot');
+  var done=false;
+  var timer=null;
+
+  function hasValue(v){return String(v||'').trim().length>0;}
+
+  function getInner(){
+    try{
+      var outerDoc=outerFrame.contentDocument || outerFrame.contentWindow.document;
+      var innerFrame=outerDoc.getElementById('appFrame');
+      if(!innerFrame)return null;
+      var win=innerFrame.contentWindow;
+      var doc=innerFrame.contentDocument || win.document;
+      if(!doc || !doc.getElementById('gExactText'))return null;
+      return {win:win,doc:doc};
+    }catch(e){return null;}
+  }
+
+  function inject(){
+    if(done)return;
+    var ctx=getInner();
+    if(!ctx)return;
+    done=true;
+    var w=ctx.win;
+    var d=ctx.doc;
+    boot.style.display='none';
+
+    var style=d.createElement('style');
+    style.id='v19AutoStyle';
+    style.textContent='#gExactTextApply,#gExactManualApply{display:none!important}.googleAutoNow{margin:8px 0;padding:8px;border-radius:12px;background:#fff;border:1px solid #a7f3d0;color:#065f46;font-size:12px;font-weight:800}.googleExactPanel h3::after{content:"（自動反映）";font-size:12px;margin-left:4px;color:#0f766e}';
+    d.head.appendChild(style);
+
+    var panel=d.getElementById('googleExactPanel');
+    var status=d.createElement('div');
+    status.id='googleAutoNow';
+    status.className='googleAutoNow';
+    status.textContent='貼り付け・入力すると自動で反映します。';
+    var note=panel.querySelector('.googleExactNote');
+    panel.insertBefore(status,note||null);
+
+    function applyNow(){
+      clearTimeout(timer);
+      timer=setTimeout(function(){
+        var text=d.getElementById('gExactText');
+        var km=d.getElementById('gExactKm');
+        var tm=d.getElementById('gExactTime');
+        var toll=d.getElementById('gExactToll');
+        var textBtn=d.getElementById('gExactTextApply');
+        var manualBtn=d.getElementById('gExactManualApply');
+        if(hasValue(text.value)){
+          if(textBtn)textBtn.click();
+          status.textContent='表示テキストを自動反映しました。';
+        }else if(hasValue(km.value)||hasValue(tm.value)||hasValue(toll.value)){
+          if(manualBtn)manualBtn.click();
+          status.textContent='手入力値を自動反映しました。';
+        }else{
+          status.textContent='貼り付け・入力すると自動で反映します。';
+        }
+      },250);
+    }
+
+    ['gExactText','gExactKm','gExactTime','gExactToll'].forEach(function(id){
+      var el=d.getElementById(id);
+      if(!el)return;
+      el.addEventListener('input',applyNow);
+      el.addEventListener('change',applyNow);
+      el.addEventListener('paste',function(){setTimeout(applyNow,30);});
+    });
+
+    if(w.notice)w.notice('v19を適用しました。Google値は貼り付け・入力と同時に自動反映します。');
+  }
+
+  outerFrame.addEventListener('load',function(){setTimeout(inject,1200);setTimeout(inject,2600);setTimeout(inject,4500);});
+  setInterval(function(){if(!done)inject();},1200);
+})();
+</script>
+</body>
+</html>
