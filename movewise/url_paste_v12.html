@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoveWise v12</title>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#eef2f7;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a}.loading{padding:24px}.err{margin:24px;padding:16px;border-radius:14px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239}.spinner{display:inline-block;width:18px;height:18px;border:3px solid #cbd5e1;border-top-color:#0f766e;border-radius:50%;animation:spin 1s linear infinite;vertical-align:-4px;margin-right:8px}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="loading"><span class="spinner"></span>MoveWise v12を読み込み中です...</div>
+<script>
+(async()=>{
+  const baseUrl='https://rawcdn.githack.com/yojiro1117/-txt/02e1c569f03a84e80ff793c8a8fa2a0535e53a16/movewise/url_paste_v11.html';
+  const patch=`
+<script>
+(function(){
+  function addV12Styles(){
+    if(document.getElementById('v12Style'))return;
+    var st=document.createElement('style');
+    st.id='v12Style';
+    st.textContent='.gmapFrame{width:100%;height:430px;border:0;border-radius:14px;background:#e2e8f0}.gmapNote{font-size:12px;color:#64748b;margin-top:8px;line-height:1.55}.gmapTools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.gmapTools .btn{white-space:nowrap}.gmapErr{padding:14px;border:1px dashed #cbd5e1;border-radius:14px;background:#f8fafc;color:#64748b;font-size:13px}';
+    document.head.appendChild(st);
+  }
+  function enc(s){return encodeURIComponent(String(s||'').trim())}
+  function coord(p){return Number(p.lat).toFixed(6)+','+Number(p.lng).toFixed(6)}
+  function hasCoord(p){return p&&p.lat!==''&&p.lng!==''&&Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lng))}
+  function pointForEmbed(p,idx){
+    // 埋め込み地図では「現在地」が使えない場合が多いため、表示用は座標を優先する。
+    if(hasCoord(p))return coord(p);
+    if(typeof labelForRouteV12==='function')return labelForRouteV12(p,idx);
+    var name=String(p.name||'').trim(),addr=String(p.address||'').trim();
+    return name&&addr?name+' '+addr:(name||addr);
+  }
+  window.labelForRouteV12=function(p,idx){
+    var name=String(p.name||'').trim(),addr=String(p.address||'').trim();
+    if(idx===0&&typeof isCurrent==='function'&&isCurrent(name))return '現在地';
+    if(name&&addr)return name+' '+addr;
+    if(name)return name;
+    if(addr)return addr;
+    if(hasCoord(p))return coord(p);
+    return '';
+  };
+  window.buildGoogleMapsEmbedUrl=function(){
+    var c=calc();
+    var pts=[c.start].concat(c.ordered);
+    var cleaned=pts.map(function(p,i){return pointForEmbed(p,i)}).filter(Boolean);
+    if(cleaned.length<2)return '';
+    var saddr=cleaned[0];
+    var daddr=cleaned.slice(1).join(' to:');
+    // APIキー不要の通常Google Maps埋め込みURL。複数地点は old maps 互換の saddr/daddr/to: 形式を使用。
+    return 'https://maps.google.com/maps?saddr='+enc(saddr)+'&daddr='+enc(daddr)+'&dirflg=d&output=embed';
+  };
+  window.refreshGoogleMapPreview=function(){
+    var iframe=document.getElementById('googleMapPreviewFrame');
+    var empty=document.getElementById('googleMapPreviewEmpty');
+    if(!iframe)return;
+    var url=buildGoogleMapsEmbedUrl();
+    if(!url){
+      iframe.style.display='none';
+      if(empty)empty.style.display='block';
+      return;
+    }
+    if(empty)empty.style.display='none';
+    iframe.style.display='block';
+    iframe.src=url;
+  };
+  window.openEmbedGoogleMapInNewTab=function(){
+    var url=buildGoogleMapsEmbedUrl();
+    if(!url){notice('Googleマップ表示用URLを作成できません。');return;}
+    window.open(url,'_blank','noopener,noreferrer');
+  };
+  function installGoogleMapPreview(){
+    addV12Styles();
+    if(document.getElementById('googleMapPreviewCard'))return;
+    var svg=document.getElementById('mapSvg');
+    var baseCard=svg?svg.closest('.card'):null;
+    if(!baseCard||!baseCard.parentElement)return;
+    var card=document.createElement('section');
+    card.className='card';
+    card.id='googleMapPreviewCard';
+    card.innerHTML='<div class="title"><h2>Googleマップ表示</h2><div class="gmapTools"><button class="btn secondary" onclick="refreshGoogleMapPreview()">地図を更新</button><button class="btn secondary" onclick="openGoogleRoute()">Googleマップで開く</button><button class="btn secondary" onclick="openEmbedGoogleMapInNewTab()">別タブで表示</button></div></div><div id="googleMapPreviewEmpty" class="gmapErr">出発地と目的地の座標または住所を入力すると、ここにGoogleマップを表示します。</div><iframe id="googleMapPreviewFrame" class="gmapFrame" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen style="display:none"></iframe><div class="gmapNote">※APIなしの通常Googleマップ埋め込みです。Google側の仕様により、経路表示・地点名・現在地の扱いが通常タブ表示と異なる場合があります。正式な経路確認は「Googleマップで開く」を使用してください。</div>';
+    baseCard.parentElement.insertBefore(card,baseCard.nextSibling);
+    setTimeout(refreshGoogleMapPreview,300);
+  }
+  var oldRender=window.render;
+  if(oldRender){
+    window.render=function(){
+      oldRender();
+      installGoogleMapPreview();
+      clearTimeout(window.__mwGmapTimer);
+      window.__mwGmapTimer=setTimeout(refreshGoogleMapPreview,450);
+    };
+  }
+  installGoogleMapPreview();
+  if(typeof render==='function')render();
+  if(typeof notice==='function')notice('v12を適用しました。概略図の下にGoogleマップ表示を追加しました。');
+})();
+<\/script>`;
+  try{
+    let html=await (await fetch(baseUrl,{cache:'no-store'})).text();
+    html=html.replace('MoveWise v11','MoveWise v12');
+    html=html.replace('v11安定版：大きめの訪問順モード切替、最終目的地固定、ドラッグ＆ドロップ並べ替えに対応しました。','v12安定版：概略ルート図の下にGoogleマップ表示を追加しました。');
+    html=html.replace('</body>',patch+'</body>');
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(e){
+    document.body.innerHTML='<div class="err"><b>読み込みに失敗しました。</b><br>ブラウザを更新してください。<br>'+String(e)+'</div>';
+  }
+})();
+</script>
+</body>
+</html>
