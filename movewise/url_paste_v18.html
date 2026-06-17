@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MoveWise v18</title>
+<style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#eef2f7;font-family:system-ui}#appFrame{width:100%;height:100%;border:0}.boot{position:absolute;left:18px;top:18px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;box-shadow:0 8px 24px #0f172a1a;font-size:14px;z-index:3}</style></head>
+<body><div id="boot" class="boot">MoveWise v18を読み込み中です...</div><iframe id="appFrame" src="https://rawcdn.githack.com/yojiro1117/-txt/f319a52a7a408d448d7549a19e934c1ba281e3b0/movewise/url_paste_v17.html"></iframe>
+<script>
+(function(){
+var f=document.getElementById('appFrame'),done=false,timer=null;
+function inject(){
+ if(done)return;
+ var w,d;
+ try{w=f.contentWindow;d=f.contentDocument||w.document}catch(e){return}
+ if(!d||!d.getElementById('gExactText'))return;
+ done=true;document.getElementById('boot').style.display='none';
+ var st=d.createElement('style');
+ st.textContent='#gExactTextApply,#gExactManualApply{display:none!important}.googleAutoNow{margin:8px 0;padding:8px;border-radius:12px;background:#fff;border:1px solid #a7f3d0;color:#065f46;font-size:12px;font-weight:800}.googleExactPanel h3::after{content:"（自動反映）";font-size:12px;margin-left:4px;color:#0f766e}';
+ d.head.appendChild(st);
+ var panel=d.getElementById('googleExactPanel');
+ var status=d.createElement('div');status.id='googleAutoNow';status.className='googleAutoNow';status.textContent='貼り付け・入力すると自動で反映します。';
+ var note=panel.querySelector('.googleExactNote');panel.insertBefore(status,note||null);
+ function has(v){return String(v||'').trim().length>0}
+ function run(){clearTimeout(timer);timer=setTimeout(function(){
+  var text=d.getElementById('gExactText'),km=d.getElementById('gExactKm'),tm=d.getElementById('gExactTime'),toll=d.getElementById('gExactToll');
+  var b1=d.getElementById('gExactTextApply'),b2=d.getElementById('gExactManualApply');
+  if(has(text.value)){if(b1)b1.click();status.textContent='表示テキストを自動反映しました。'}
+  else if(has(km.value)||has(tm.value)||has(toll.value)){if(b2)b2.click();status.textContent='手入力値を自動反映しました。'}
+ },250)}
+ ['gExactText','gExactKm','gExactTime','gExactToll'].forEach(function(id){var el=d.getElementById(id);if(el){el.addEventListener('input',run);el.addEventListener('paste',function(){setTimeout(run,30)})}});
+ if(w.notice)w.notice('v18を適用しました。Google値は貼り付け・入力と同時に自動反映します。')
+}
+f.addEventListener('load',function(){setTimeout(inject,1000);setTimeout(inject,2500)});setInterval(inject,1500);
+})();
+</script></body></html>
