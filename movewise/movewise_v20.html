@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MoveWise v8</title>
+<title>MoveWise</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#eef2f7;color:#0f172a;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}.app{max-width:1500px;margin:auto;padding:12px}.top{display:grid;grid-template-columns:1fr auto;gap:12px;background:linear-gradient(135deg,#020617,#0f172a 55%,#0f766e);color:#fff;border-radius:22px;padding:14px 20px;margin-bottom:12px}.top h1{font-size:24px;margin:2px 0 4px}.top p{margin:0;color:#dbeafe;font-size:13px}.stats{display:grid;grid-template-columns:repeat(4,150px);gap:8px}.stat{background:#ffffff18;border:1px solid #ffffff24;border-radius:14px;padding:10px}.stat small{display:block;color:#cbd5e1;font-size:11px}.stat b{font-size:17px}.layout{display:grid;grid-template-columns:310px 1fr;gap:12px}.rail{position:sticky;top:10px}.card,.side{background:#fff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 8px 22px #0f172a0d}.card{padding:12px;margin-bottom:10px}.side{padding:12px;margin-bottom:10px}details.side{padding:0}summary{list-style:none;cursor:pointer;padding:12px 14px;font-weight:800}summary::-webkit-details-marker{display:none}details[open] summary{border-bottom:1px solid #e2e8f0}.sidebody{padding:12px 14px}.title{display:flex;justify-content:space-between;align-items:center;margin:0 0 8px}.title h2{font-size:16px;margin:0}.muted{color:#64748b;font-size:12px;line-height:1.55}.field{display:block;margin-bottom:7px}.field span{display:block;font-size:11px;font-weight:800;color:#475569;margin-bottom:4px}input,select,textarea{width:100%;border:1px solid #e2e8f0;border-radius:11px;padding:7px 9px;font-size:13px;background:#fff;outline:none}textarea{resize:vertical}input:focus,select:focus,textarea:focus{border-color:#14b8a6;box-shadow:0 0 0 3px #14b8a61f}.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.row3{display:grid;grid-template-columns:.75fr 1fr 1fr;gap:8px}.check{display:flex;gap:7px;align-items:center;background:#f8fafc;border-radius:12px;padding:8px;margin:6px 0;font-size:13px}.check input{width:auto}.btns{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.btn{border:0;border-radius:11px;padding:8px 11px;font-weight:800;cursor:pointer;background:#0f172a;color:#fff;font-size:13px}.btn.secondary{background:#fff;color:#334155;border:1px solid #e2e8f0}.btn.teal{background:#0f766e}.btn.danger{background:#fff1f2;color:#be123c;border:1px solid #ffe4e6}.btn.mini{padding:6px 9px;font-size:12px}.places{display:grid;grid-template-columns:440px 1fr;gap:12px}.destgrid{display:grid;grid-template-columns:repeat(2,minmax(300px,1fr));gap:10px}.dest,.startbox{background:#f8fafc;border:1px solid #e2e8f0;border-radius:15px;padding:10px}.destHead{display:flex;justify-content:space-between;align-items:center;font-weight:800;margin-bottom:8px}.notice{display:none;border-radius:14px;padding:10px;margin-bottom:12px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;font-size:13px}.notice.show{display:block}.warn{display:none;border-radius:14px;padding:9px;margin:8px 0;background:#fffbeb;border:1px solid #fcd34d;color:#92400e;font-size:13px}.tip{background:#f0f9ff;border:1px solid #bae6fd;color:#075985;border-radius:14px;padding:9px;font-size:12px;line-height:1.55;margin-top:8px}svg{width:100%;height:260px;border-radius:14px;background:linear-gradient(135deg,#f8fafc,#e0f2fe)}.csvarea{height:110px}.kv{display:flex;justify-content:space-between;border-bottom:1px dashed #e2e8f0;padding:6px 0;font-size:13px}.miniRoute{margin-top:10px;border-top:1px solid #e2e8f0;padding-top:9px}.miniRoute h3{font-size:13px;margin:0 0 6px;display:flex;justify-content:space-between}.routeTools{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px}.routeLine{display:grid;grid-template-columns:26px 1fr auto;gap:6px;align-items:center;padding:6px 0;border-bottom:1px dashed #e2e8f0;font-size:12px}.routeLine:last-child{border-bottom:0}.badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#0ea5e9;color:#fff;font-weight:900;font-size:11px}.routeName{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.routeMeta{color:#64748b;font-size:11px;text-align:right}.emptyRoute{font-size:12px;color:#64748b;padding:8px;background:#fff;border:1px dashed #cbd5e1;border-radius:12px}.routeSource{font-size:10px;color:#0f766e;margin-left:5px}.pastebox{margin-top:8px;padding-top:8px;border-top:1px dashed #cbd5e1}.pastearea{height:58px}.routePaste{height:118px}@media(max-width:1200px){.places{grid-template-columns:1fr}.destgrid{grid-template-columns:1fr}}@media(max-width:1100px){.layout{grid-template-columns:1fr}.rail{position:static}.stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:720px){.top{grid-template-columns:1fr}.row,.row3{grid-template-columns:1fr}.app{padding:8px}}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="top"><div><b>🚗 MoveWise MVP</b><h1>移動最適化スケジューラー</h1><p></p></div><div class="stats"><div class="stat"><small>総距離</small><b id="sKm">-</b></div><div class="stat"><small>移動</small><b id="sMove">-</b></div><div class="stat"><small>総所要</small><b id="sTotal">-</b></div><div class="stat"><small>完了予定</small><b id="sFinish">-</b></div></div></header>
+<header class="top"><div><b>🚗 MoveWise MVP</b><h1>移動最適化スケジューラー</h1><p></p></div><div class="stats"><div class="stat"><small>総距離（概算）</small><b id="sKm">-</b></div><div class="stat"><small>移動（概算）</small><b id="sMove">-</b></div><div class="stat"><small>総所要</small><b id="sTotal">-</b></div><div class="stat"><small>完了予定</small><b id="sFinish">-</b></div></div></header>
 <div id="notice" class="notice"></div>
 <div class="layout">
 <aside class="rail">
@@ -554,6 +554,36 @@ window.render=function(){
  statusDisplay(c);renderLegs(c);refreshPreview(c);
 };
 window.renderMiniRoute=function(c){_baseRenderMini(c);};
+
+window.routeByNames=function(){
+ var c=calc(),points=[c.start].concat(c.ordered);
+ if(document.getElementById("returnToStart").checked && c.ordered.length)points.push(c.start);
+ if(c.missingStart||points.length<2)return null;
+ var dest=pointString(points[points.length-1]);if(!dest)return null;
+ var u=new URL("https://www.google.com/maps/dir/");
+ u.searchParams.set("api","1");
+ if(!currentLocation(points[0]))u.searchParams.set("origin",pointString(points[0]));
+ u.searchParams.set("destination",dest);
+ var transport=document.getElementById("mode").value;
+ u.searchParams.set("travelmode",transport==="walk"?"walking":transport==="transit"?"transit":"driving");
+ var intermediate=points.slice(1,-1).map(pointString).filter(Boolean);
+ if(intermediate.length)u.searchParams.set("waypoints",intermediate.join("|"));
+ return u.toString();
+};
+window.openGoogleRoute=function(){
+ var u=window.routeByNames();
+ if(!u){notice("出発地と目的地の位置を確定してから操作してください。");return;}
+ if(/iPhone|Android/i.test(navigator.userAgent)&&calc().ordered.length>4){
+   notice("スマートフォンのGoogleマップはURL経由地数に制限があります。区間別リンクの利用を推奨します。");
+ }
+ window.open(u,"_blank","noopener,noreferrer");
+};
+window.copyGoogleRouteUrl=function(){
+ var u=window.routeByNames();
+ if(!u){notice("まず出発地と目的地の位置を確定してください。");return;}
+ navigator.clipboard.writeText(u).then(function(){notice("ルートURLをコピーしました。");},function(){prompt("ルートURLをコピーしてください",u);});
+};
+
 buildModeUI();renderDests();render();
 })();
 
