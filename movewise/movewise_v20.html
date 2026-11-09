@@ -493,7 +493,15 @@ function legUrl(from,to,provider,mode){
   a.searchParams.set("dirflg",mode==="walk"?"w":mode==="transit"?"r":"d");
   return a.toString();
  }
- if(provider==="yahoo"){return "https://map.yahoo.co.jp/search?q="+encodeURIComponent(dst);}
+ if(provider==="yahoo"){
+  var routeMode=mode==="walk"?"walk":mode==="transit"?"train":"car";
+  var y=new URL("https://map.yahoo.co.jp/route/"+routeMode);
+  y.searchParams.set("from",originIsCurrent?"現在地":origin);
+  y.searchParams.set("to",dst);
+  if(hasValidCoords(from)){y.searchParams.set("fromLat",Number(from.lat).toFixed(6));y.searchParams.set("fromLon",Number(from.lng).toFixed(6));}
+  if(hasValidCoords(to)){y.searchParams.set("toLat",Number(to.lat).toFixed(6));y.searchParams.set("toLon",Number(to.lng).toFixed(6));}
+  return y.toString();
+ }
  if(provider==="yjcarnavi"&&hasValidCoords(to)){return "yjcarnavi://navi/select?lat="+encodeURIComponent(Number(to.lat).toFixed(6))+"&lon="+encodeURIComponent(Number(to.lng).toFixed(6))+"&name="+encodeURIComponent(to.canonicalName||to.name||to.address||"目的地");}
  return "";
 }
@@ -520,12 +528,12 @@ function renderLegs(c){
    var links=makeEl("div","mwLegLinks");
    var mode=document.getElementById("mode").value;
    addMapLink(links,"Googleマップ",legUrl(from,to,"google",mode));
-   addMapLink(links,"Yahoo!マップ（地点）",legUrl(from,to,"yahoo",mode));
+   addMapLink(links,"Yahoo!マップ",legUrl(from,to,"yahoo",mode));
    if(/iPhone|iPad|Android/i.test(navigator.userAgent))addMapLink(links,"Yahoo!カーナビ（現在地から）",legUrl(from,to,"yjcarnavi",mode));
    addMapLink(links,"Appleマップ",legUrl(from,to,"apple",mode));
    line.appendChild(links);host.appendChild(line);
  }
- host.appendChild(makeEl("div","mwSmall","Yahoo!マップは目的地の検索表示です。Yahoo!カーナビはインストール済みの場合、現在地から目的地への案内を起動します。Google・Appleは区間ルートのURLを生成します。"));
+ host.appendChild(makeEl("div","mwSmall","Yahoo!マップは区間別ルートURLで開きます。Yahoo!カーナビはインストール済みの場合、現在地から目的地への案内を起動します。Google・Appleは区間ルートのURLを生成します。"));
 }
 function getGooglePreviewUrl(c){
  if(!c.ordered.length || c.missingStart)return "";
