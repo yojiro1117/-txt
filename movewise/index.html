@@ -43,13 +43,12 @@ function isCoord(p){let a=Number(p.lat),b=Number(p.lng);return p&&p.lat!==''&&p.
 function isJapanCoord(lat,lng){return lat>=20&&lat<=46&&lng>=122&&lng<=154}
 function rad(d){return d*Math.PI/180}
 function dist(a,b){if(!isCoord(a)||!isCoord(b))return 0;let R=6371,dla=rad(Number(b.lat)-Number(a.lat)),dlo=rad(Number(b.lng)-Number(a.lng)),la1=rad(Number(a.lat)),la2=rad(Number(b.lat)),h=Math.sin(dla/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dlo/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
-function fakeCoord(seed,i){let h=0,t=(seed||'MoveWise')+'-'+i;for(let j=0;j<t.length;j++)h=Math.imul(31,h)+t.charCodeAt(j)|0;let n1=Math.abs(Math.sin(h)*1e4)%1,n2=Math.abs(Math.cos(h)*1e4)%1;return{lat:+(FUK.lat+(n1-.5)*.13).toFixed(6),lng:+(FUK.lng+(n2-.5)*.16).toFixed(6)}}
 function norm(s){return String(s||'').replace(/[\s　・･\-ー－―‐]/g,'').toLowerCase()}
 function isCurrent(s){return ['現在地','現在位置','いまここ','ここ','currentlocation'].includes(norm(s))}
 function isHome(s){return ['自宅','家','自宅住所','home'].includes(norm(s))}
 function known(q){let n=norm(q);if(!n)return null;for(let p of KNOWN){if(p.aliases.some(a=>norm(a)===n)||norm(p.name)===n)return {...p,source:'内蔵辞書'}}for(let p of KNOWN){if(p.aliases.some(a=>n.includes(norm(a))||norm(a).includes(n)))return {...p,source:'内蔵辞書'}}return null}
 function addrLike(q){return /(都|道|府|県|市|区|町|村|丁目|番|号|\d)/.test(q||'')}
-function hydratePoint(p,i){let out={...p};if(!isCoord(out)){let k=known(out.name)||known(out.address);if(k){out.address=out.address||k.address;out.lat=k.lat;out.lng=k.lng;out.estimated=false;out.source='辞書座標';return out}}if(isCoord(out)){out.lat=Number(out.lat);out.lng=Number(out.lng);out.estimated=false;out.source=out.source||'入力/URL座標';return out}let fc=fakeCoord(out.address||out.name,i);return {...out,...fc,estimated:true,source:'概算座標'}}
+function hydratePoint(p,i){let out={...p};if(isCoord(out)){out.lat=Number(out.lat);out.lng=Number(out.lng);out.estimated=false;return out;}return {...out,lat:"",lng:"",estimated:false,unresolved:true,source:"未確定"};}
 function decodeLoose(s){try{return decodeURIComponent(String(s||'').replace(/\+/g,' '))}catch(e){return String(s||'')}}
 function extractCoords(text){let raw=String(text||''),s=decodeLoose(raw),c=[],m;let r1=/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/g;while((m=r1.exec(s)))c.push({lat:+m[1],lng:+m[2],type:'!3d!4d'});let r2=/(?:[?&](?:q|query|ll|center)=)(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/g;while((m=r2.exec(s)))c.push({lat:+m[1],lng:+m[2],type:'query'});let r3=/@(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)(?:,|z|$)/g;while((m=r3.exec(s)))c.push({lat:+m[1],lng:+m[2],type:'@'});let r4=/!2d(-?\d+(?:\.\d+)?)!3d(-?\d+(?:\.\d+)?)/g;while((m=r4.exec(s)))c.push({lat:+m[2],lng:+m[1],type:'!2d!3d'});let r5=/\b(-?\d{1,2}\.\d{4,})\s*,\s*(-?\d{2,3}\.\d{4,})\b/g;while((m=r5.exec(s)))c.push({lat:+m[1],lng:+m[2],type:'pair'});c=c.filter(x=>Number.isFinite(x.lat)&&Number.isFinite(x.lng)&&isJapanCoord(x.lat,x.lng));return c.length?{lat:+c[0].lat.toFixed(6),lng:+c[0].lng.toFixed(6),type:c[0].type}:null}
 function extractPlaceLabel(text){let s=decodeLoose(text||''),m=s.match(/\/maps\/place\/([^/@?]+)/);if(m)return cleanLabel(m[1]);m=s.match(/[?&](?:q|query)=([^&]+)/);if(m&&!/^\s*-?\d/.test(m[1]))return cleanLabel(m[1]);return ''}
@@ -380,6 +379,8 @@ function enhanceDestCards(){
   });
   var actions=card.querySelector(".btns");
   if(actions){
+   var nearAddr=Array.from(actions.querySelectorAll("button")).find(function(x){return x.textContent.includes("座標から住所")});
+   if(nearAddr)nearAddr.textContent="付近住所を確認";
    var candidatesButton=Array.from(actions.querySelectorAll("button")).find(function(x){return x.textContent.includes("名称/住所")});
    if(candidatesButton)candidatesButton.textContent="施設候補を検索";
    var link=makeEl("a","btn secondary mini","Googleで所在地確認");
@@ -393,6 +394,31 @@ function enhanceDestCards(){
   if(d.name&&!hasValidCoords(d))buildCandidateRows(d.id,candidates(d.name),true);
  });
 }
+window.getAddressFromDestCoords=async function(id){
+ var d=destinations.find(function(x){return x.id===id;});
+ if(!d||!hasValidCoords(d)){notice("座標が未入力です。");return;}
+ var address=await reverseGeo(Number(d.lat),Number(d.lng));
+ var holder=document.getElementById("mwCand_"+id);
+ if(!holder)return;
+ var panel=makeEl("div","mwCandidate");
+ var info=makeEl("div","mwCandidateInfo");
+ info.appendChild(makeEl("strong","","付近住所（建物住所と一致するとは限りません）"));
+ info.appendChild(makeEl("small","",address||"住所を取得できませんでした。"));
+ panel.appendChild(info);
+ if(address){
+  var btn=makeEl("button","btn secondary mini","確認して採用");btn.type="button";
+  btn.onclick=function(){
+   updateState(id,function(x){x.address=address;x.source="逆引き住所（ユーザー選択）";});
+   renderDests();render();
+  };
+  panel.appendChild(btn);
+ }
+ holder.replaceChildren(panel);
+};
+window.lookupAll=function(){
+ destinations.forEach(function(d){if(d.name&&!hasValidCoords(d))buildCandidateRows(d.id,candidates(d.name),true);});
+ notice("各目的地の候補から施設を選択してください。住所・座標は自動確定しません。");
+};
 window.renderDests=function(){_baseRenderDests();enhanceDestCards();syncFinalSelect();};
 function syncFinalSelect(){
  var sel=document.getElementById("mwFinalDestination");if(!sel)return;
@@ -468,6 +494,7 @@ function legUrl(from,to,provider,mode){
   return a.toString();
  }
  if(provider==="yahoo"){return "https://map.yahoo.co.jp/search?q="+encodeURIComponent(dst);}
+ if(provider==="yjcarnavi"&&hasValidCoords(to)){return "yjcarnavi://navi/select?lat="+encodeURIComponent(Number(to.lat).toFixed(6))+"&lon="+encodeURIComponent(Number(to.lng).toFixed(6))+"&name="+encodeURIComponent(to.canonicalName||to.name||to.address||"目的地");}
  return "";
 }
 function addMapLink(holder,label,url){
@@ -494,10 +521,11 @@ function renderLegs(c){
    var mode=document.getElementById("mode").value;
    addMapLink(links,"Googleマップ",legUrl(from,to,"google",mode));
    addMapLink(links,"Yahoo!マップ（地点）",legUrl(from,to,"yahoo",mode));
+   if(/iPhone|iPad|Android/i.test(navigator.userAgent))addMapLink(links,"Yahoo!カーナビ（現在地から）",legUrl(from,to,"yjcarnavi",mode));
    addMapLink(links,"Appleマップ",legUrl(from,to,"apple",mode));
    line.appendChild(links);host.appendChild(line);
  }
- host.appendChild(makeEl("div","mwSmall","Yahoo!マップは目的地点の検索画面へ移動します（区間の出発地は自動設定されません）。Google・Appleは区間ルートのURLを生成します。"));
+ host.appendChild(makeEl("div","mwSmall","Yahoo!マップは目的地の検索表示です。Yahoo!カーナビはインストール済みの場合、現在地から目的地への案内を起動します。Google・Appleは区間ルートのURLを生成します。"));
 }
 function getGooglePreviewUrl(c){
  if(!c.ordered.length || c.missingStart)return "";
